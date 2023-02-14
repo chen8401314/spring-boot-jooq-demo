@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(":registry-client")
+
+    implementation "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
+    implementation "com.baomidou:mybatis-plus-generator:${mybatisPlusVersion}"
+    implementation "com.alibaba:druid:${druidVersion}"
+    implementation "javax.validation:validation-api:${validationVersion}"
+    implementation "org.hibernate:hibernate-validator:${hibernateValidationVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    implementation "com.github.xiaoymin:swagger-bootstrap-ui:${swaggerUiVersion}"
+    implementation "mysql:mysql-connector-java:${mysqlVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+}

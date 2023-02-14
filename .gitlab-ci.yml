@@ -1,0 +1,21 @@
+stages:
+  - build-docker-publish
+  - test
+  - cleanup
+
+build:
+  stage: build-docker-publish
+  script:
+    - echo "Code building stage..."
+    - GIT_BRANCH=$(git show -s --pretty=%d HEAD | cut -d ')' -f 1 | awk -F " " '{print $NF}')
+    - PROFILE=debug
+    - /bin/bash -ex run_build.sh $GIT_BRANCH $PROFILE
+    - echo "Done."
+
+cleanup:
+  stage: cleanup
+  script:
+    - echo "I am in cleanup stage..."
+    - GIT_BRANCH=$(git show -s --pretty=%d HEAD | cut -d ')' -f 1 | awk -F " " '{print $NF}')
+    - /bin/bash -ex run_cleanup.sh $GIT_BRANCH
+    - echo "Done."

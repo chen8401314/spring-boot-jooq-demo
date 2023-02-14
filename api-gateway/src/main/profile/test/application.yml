@@ -1,0 +1,111 @@
+timeoutSecond: ${TIMEOUT_SECOND:180}
+server:
+  port: 8080
+  servlet:
+    context-path: /gateway
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: test
+  redis:
+    #    host: ${REDIS_HOST:redis-cluster-0}
+    cluster:
+      nodes: redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379
+  main:
+    allow-bean-definition-overriding: true
+  codec:
+    max-in-memory-size: 20MB
+  cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: true
+        monitoring-config-maps: true
+        strategy: refresh
+        mode: event
+      config:
+        name: ${spring.application.name}
+        namespace: loonshots-dev
+    circuitbreaker:
+      hystrix:
+        enabled: false
+    loadbalancer:
+      ribbon:
+        enabled: false
+      retry:
+        enable: true
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: true
+            allowed-origin-patterns: ${CORS_ALLOWED_ORIGINS:http://ui.devk.huagui.com.cn,https://ui.devk.huagui.com.cn}
+            allowed-headers: "*"
+            allowed-methods: "*"
+            max-age: 18000
+            exposed-headers:
+              - Authorization
+      routes:
+        - id: huagui-user-anonymous
+          order: 0
+          predicates:
+            - Path=/user/*/anon/**, /user/swagger-ui.html**, /user/doc.html**, /user/webjars/**, /user/v2/api-docs, /user/swagger-resources/**
+          uri: lb://user-service
+          filters:
+            - OrderedAddRequestHeader=anonymous, TRUE
+        - id: huagui-user
+          order: 1
+          predicates:
+            - Path=/user/**
+          uri: lb://user-service
+          filters:
+            - name: CircuitBreaker
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@userKeyResolver}"
+                redis-rate-limiter.replenishRate: 30
+                redis-rate-limiter.burstCapacity: 60
+        # ==============websocket 路由=============
+        - id: user-websocket
+          uri: lb:${WEBSOCKET_TYPE:ws}://user-service
+          order: 19
+          predicates:
+            - Path=/ws/user/websocket/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@userKeyResolver}"
+                redis-rate-limiter.replenishRate: 30
+                redis-rate-limiter.burstCapacity: 60
+        - id: huagui-bim-cache
+          order: 21
+          uri: lb://bimmodel
+          predicates:
+            - Path=/api/**
+          filters:
+            - OrderedAddRequestHeader=anonymous, TRUE
+        - id: huagui-bim-data
+          order: 24
+          uri: ${BIMDATA_SERVER:lb://bimdata}
+          predicates:
+            - Path=/bimdata/**
+          filters:
+            - OrderedAddRequestHeader=anonymous, TRUE
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+    prometheus:
+      enabled: true
+  endpoint:
+    restart:
+      enabled: true
+

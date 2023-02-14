@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.TestEntity">
+        <result column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_id" property="createId"/>
+        <result column="update_id" property="updateId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="age" property="age"/>
+        <result column="birthday" property="birthday"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="department" property="department"/>
+        <result column="home_address" property="homeAddress"/>
+        <result column="is_marry" property="isMarry"/>
+        <result column="status" property="status"/>
+        <result column="photo" property="photo"/>
+    </resultMap>
+
+    <select id="findPage" resultType="com.example.demo.entity.TestEntity">
+        SELECT * FROM pf_test
+        <where>
+            <if test="name!=null and name!=''">
+                AND name = #{name}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPageDTO" resultType="com.example.demo.dto.TestDTO">
+        SELECT * FROM pf_test
+        <where>
+            <if test="name!=null and name!=''">
+                AND name like concat('%', #{name}, '%')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

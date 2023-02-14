@@ -1,0 +1,66 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${superServiceImplClassPackage};
+import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+/**
+ * <p>
+ * $!{table.comment.replace("表", "")} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ */
+@Slf4j
+@Service
+@AllArgsConstructor
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}>{
+
+    @Resource
+    ${table.mapperName} $!{table.mapperName.substring(0,1).toLowerCase()}$!{table.mapperName.substring(1)};
+
+		public IPage<$!{entity.replace("Entity", "DTO")}> page($!{entity.replace("Entity", "PageReq")} query) {
+			return $!{table.mapperName.substring(0,1).toLowerCase()}$!{table.mapperName.substring(1)}.page(query);
+		}
+
+        public void add($!{entity.replace("Entity", "Req")} $!{table.entityPath.replace("Entity", "Req")}) {
+            ${entity} entity = $!{entity.replace("Entity", "").toUpperCase()}_CONVERT.toEntity($!{table.entityPath.replace("Entity", "Req")});
+			save(entity);
+        }
+
+        public void edit($!{entity.replace("Entity", "Req")} $!{table.entityPath.replace("Entity", "Req")}) {
+            ${entity} entity = getById($!{table.entityPath.replace("Entity", "Req")}.getId());
+
+			$!{entity.replace("Entity", "").toUpperCase()}_CONVERT.copy($!{table.entityPath.replace("Entity", "Req")}, entity);
+            updateById(entity);
+        }
+
+        public void batchDelete(List<String> deleteIds) {
+            for (String id : deleteIds) {
+                ${entity} entity = getById(id);
+                if (entity == null) {
+                    continue;
+                }
+                removeById(id);
+            }
+        }
+
+}
+#end

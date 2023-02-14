@@ -1,0 +1,176 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            allowInsecureProtocol = true
+            name = "shanghai"
+            url = project.ext.repositoryUrl
+        }
+        maven {url 'https://maven.aliyun.com/repository/public/'}
+        maven {url 'https://maven.aliyun.com/repository/spring/'}
+        maven {url 'https://maven.aliyun.com/repository/central/'}
+        maven {url 'https://maven.aliyun.com/repository/google/'}
+        maven {url 'https://maven.aliyun.com/repository/gradle-plugin/'}
+        maven {url 'https://maven.aliyun.com/repository/spring-plugin/'}
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0")
+    }
+}
+
+subprojects {
+    buildscript {
+        repositories {
+            mavenLocal()
+            maven {
+                allowInsecureProtocol = true
+                name = "shanghai"
+                url = project.ext.repositoryUrl
+            }
+            maven { url "https://maven.aliyun.com/repository/public" }
+            maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "org.sonarqube"
+
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
+    sonarqube {
+        properties {
+            property "sonar.sources", "src/main/java"
+            property "sonar.sourceEncoding", "UTF-8"
+        }
+    }
+
+    dependencyManagement {
+        imports {
+           // mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor 1, 'seconds'
+            cacheDynamicVersionsFor 1, 'seconds'
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        maven {
+            allowInsecureProtocol = true
+            name = "shanghai"
+            url = project.ext.repositoryUrl
+        }
+        maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+    }
+
+    compileJava {
+        options.fork = true
+        options.encoding = "UTF-8"
+    }
+
+    compileTestJava {
+        options.fork = true
+        options.failOnError = true
+        options.encoding = "UTF-8"
+    }
+
+
+
+    def env = System.getProperty("profile") ?: "dev"
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java", "build/generated/sources/annotationProcessor/java/main"]
+            }
+            resources {
+                srcDirs = ["src/main/resources", "src/main/profile/$env"]
+            }
+        }
+    }
+
+
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+
+    repositories {
+        mavenLocal()
+        maven {
+            allowInsecureProtocol = true
+            name = "shanghai"
+            url = project.ext.repositoryUrl
+        }
+        maven {url 'https://maven.aliyun.com/repository/public/'}
+        maven {url 'https://maven.aliyun.com/repository/spring/'}
+        maven {url 'https://maven.aliyun.com/repository/central/'}
+        maven {url 'https://maven.aliyun.com/repository/google/'}
+        maven {url 'https://maven.aliyun.com/repository/gradle-plugin/'}
+        maven {url 'https://maven.aliyun.com/repository/spring-plugin/'}
+        mavenCentral()
+    }
+
+
+
+    dependencies {
+        implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
+
+        implementation("io.springfox:springfox-swagger2:${swaggerVersion}") {
+            exclude group: "com.google.guava", module: "guava"
+            exclude group: "org.slf4j", module: "slf4j-api"
+            exclude group: "com.fasterxml.jackson.core"
+        }
+
+        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+        implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4jVersion}"
+        implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
+        implementation("io.jsonwebtoken:jjwt:${jjwtVersion}") {
+            exclude group: "com.fasterxml.jackson.core"
+        }
+        implementation "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+        implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
+        implementation "javax.xml.bind:jaxb-api:${jaxbVersion}"
+
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        implementation "org.mapstruct:mapstruct:${mapStructVersion}"
+        annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+
+        implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+        implementation "de.codecentric:spring-boot-admin-starter-client:${springBootVersion}"
+        implementation "io.minio:minio:${minioVersion}"
+        implementation "cn.hutool:hutool-core:${hutoolVersion}"
+
+
+
+        testImplementation("org.springframework.boot:spring-boot-starter-test") {
+            exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+

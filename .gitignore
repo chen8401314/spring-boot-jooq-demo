@@ -1,0 +1,23 @@
+# gradle
+#gradle/
+#gradlew
+#gradlew.bat
+.gradle
+
+# eclipse
+.settings
+.classpath
+.project
+build
+
+#intellij IDEA
+.idea
+*.iml
+
+# vim
+*.swp
+
+# .log
+*.log
+
+*/out/*

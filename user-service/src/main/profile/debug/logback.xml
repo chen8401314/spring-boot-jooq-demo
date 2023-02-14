@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <contextName>${COMPONENT}</contextName>
+    <property name="CHARSET" value="UTF-8"/>
+    <property name="PATTERN"
+              value="%blue(%date{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %cyan(%logger{50}) - %highlight(%msg) %n"/>
+
+    <!-- console output -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <!-- Daily Rolling File Appender that compresses old files -->
+    <appender name="file"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/app.log</file>
+        <rollingPolicy name="file"
+                       class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>log/app-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%p [%t] %d %c: %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="file"/>
+    </root>
+</configuration>

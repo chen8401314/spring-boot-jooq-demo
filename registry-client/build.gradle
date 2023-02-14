@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+}
+
+sonarqube {
+    skipProject = true
+}
+
+dependencies {
+    def profile = System.getProperty("profile") ?: "dev"
+    api "org.springframework.cloud:spring-cloud-starter"
+    if ("dev" == profile || "debug" == profile) {
+        api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
+            exclude group: "com.netflix.hystrix"
+            exclude group: "com.netflix.ribbon"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-archaius"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-ribbon"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-ribbon"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-hystrix"
+        }
+    } else {
+        api("org.springframework.cloud:spring-cloud-starter-kubernetes-client-all") {
+            exclude group: "org.springframework.cloud", module: "spring-cloud-kubernetes-ribbon"
+        }
+    }
+}
+jar.enabled = true
+bootJar.enabled = false

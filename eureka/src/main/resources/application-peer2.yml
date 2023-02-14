@@ -1,0 +1,24 @@
+server:
+  port: 8762
+  host: localhost
+spring:
+  application:
+    name: eureka-server-clustered
+  profiles: peer2
+eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+    eureka-service-url-poll-interval-seconds: 60
+    registry-fetch-interval-seconds: 5
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 60000
+    wait-time-in-ms-when-sync-empty: 6000000
+    peer-eureka-nodes-update-interval-ms: 60000

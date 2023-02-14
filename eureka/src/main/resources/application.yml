@@ -1,0 +1,20 @@
+server:
+  port: 80
+eureka:
+  instance:
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 60000
+    wait-time-in-ms-when-sync-empty: 6000000
+    peer-eureka-nodes-update-interval-ms: 60000
+

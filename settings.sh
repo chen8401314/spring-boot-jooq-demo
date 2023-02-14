@@ -1,0 +1,1 @@
+echo "character-set-server=utf8" >> /etc/mysql/mysql.conf.d/mysqld.cnf
