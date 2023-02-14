@@ -6,7 +6,7 @@ image_tag=$1
 if [ "$image_tag" = "" ]; then
     image_tag=latest
 fi
-moduleArr=("api-gateway" "api-test" "asset-service" "component-library-service" "eureka" "new-metro-project" "newoa" "progress-plan-service" "survey-service" "user-service")
+moduleArr=("api-gateway" "eureka" "user-service")
 for dir in $(ls -l | grep ^d | awk '{print $NF}')
 do
   if echo "${moduleArr[@]}" | grep -w "$dir" &>/dev/null; then
