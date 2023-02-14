@@ -6,7 +6,7 @@ profile=$1
 if [ "$profile" = "" ]; then
     profile=dev
 fi
-${currPath}/gradlew -x test build -Dprofile=$profile
+chmod +x gradlew && ${currPath}/gradlew -x test build -Dprofile=$profile
 #excludeTest=$2
 #if [ "$excludeTest" = "true" ]
 #then
