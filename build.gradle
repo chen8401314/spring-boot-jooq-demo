@@ -132,13 +132,7 @@ subprojects {
 
 
     dependencies {
-        implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
 
-        implementation("io.springfox:springfox-swagger2:${swaggerVersion}") {
-            exclude group: "com.google.guava", module: "guava"
-            exclude group: "org.slf4j", module: "slf4j-api"
-            exclude group: "com.fasterxml.jackson.core"
-        }
 
         implementation "ch.qos.logback:logback-classic:${logbackVersion}"
         implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4jVersion}"
@@ -159,9 +153,7 @@ subprojects {
 
         implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
         implementation "de.codecentric:spring-boot-admin-starter-client:${springBootVersion}"
-        implementation "io.minio:minio:${minioVersion}"
-        implementation "cn.hutool:hutool-core:${hutoolVersion}"
-
+        implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
 
 
         testImplementation("org.springframework.boot:spring-boot-starter-test") {

@@ -23,6 +23,24 @@ dependencies {
             exclude group: "org.springframework.cloud", module: "spring-cloud-kubernetes-ribbon"
         }
     }
+
+    api "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
+    api "com.baomidou:mybatis-plus-generator:${mybatisPlusVersion}"
+    api "com.alibaba:druid:${druidVersion}"
+    api "javax.validation:validation-api:${validationVersion}"
+    api "org.hibernate:hibernate-validator:${hibernateValidationVersion}"
+    api "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    api "com.github.xiaoymin:swagger-bootstrap-ui:${swaggerUiVersion}"
+    api "mysql:mysql-connector-java:${mysqlVersion}"
+    api "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    api "cn.hutool:hutool-core:${hutoolVersion}"
+
+    api("io.springfox:springfox-swagger2:${swaggerVersion}") {
+        exclude group: "com.google.guava", module: "guava"
+        exclude group: "org.slf4j", module: "slf4j-api"
+        exclude group: "com.fasterxml.jackson.core"
+    }
+    api "io.minio:minio:${minioVersion}"
 }
 jar.enabled = true
 bootJar.enabled = false

@@ -1,8 +1,26 @@
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
+    dependencies {
+        def profile = System.getProperty("profile") ?: "dev"
+        api "org.springframework.cloud:spring-cloud-starter"
+        if ("dev" == profile || "debug" == profile) {
+            api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
+                exclude group: "com.netflix.hystrix"
+                exclude group: "com.netflix.ribbon"
+                exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-archaius"
+                exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-ribbon"
+                exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-ribbon"
+                exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-hystrix"
+            }
+        } else {
+            api("org.springframework.cloud:spring-cloud-starter-kubernetes-client-all") {
+                exclude group: "org.springframework.cloud", module: "spring-cloud-kubernetes-ribbon"
+            }
+        }
+    }
+    //implementation "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
     implementation project(":base-common")
-    implementation project(":registry-client")
+    //implementation project(":registry-client")
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
     implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
