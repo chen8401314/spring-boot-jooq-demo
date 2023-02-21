@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -90,8 +92,8 @@ public class JWTUtils {
         UserToken.UserTokenBuilder builder = UserToken.builder();
         builder.id(claims.getId())
                 .name(claims.getSubject())
-                .expireAt(ZonedDateTime.ofInstant(claims.getExpiration().toInstant(), ZoneOffset.UTC))
-                .signAt(ZonedDateTime.ofInstant(claims.getIssuedAt().toInstant(), ZoneOffset.UTC))
+                .expireAt(LocalDateTime.ofInstant(claims.getExpiration().toInstant(), ZoneId.systemDefault()))
+                .signAt(LocalDateTime.ofInstant(claims.getIssuedAt().toInstant(), ZoneId.systemDefault()))
                 .version((Integer) claims.get(UserToken.VERSION));
 
 

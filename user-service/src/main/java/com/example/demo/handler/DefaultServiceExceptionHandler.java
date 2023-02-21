@@ -1,9 +1,9 @@
 package com.example.demo.handler;
 
 import com.example.demo.common.Response;
-import com.example.demo.context.CommonException;
 import com.google.common.base.Throwables;
 
+import com.huagui.common.base.context.CommonException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.core.annotation.AnnotationUtils;

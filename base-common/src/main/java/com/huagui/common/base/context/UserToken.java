@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -32,10 +32,10 @@ public class UserToken implements Principal, Serializable {
     private String name;
 
     @Getter
-    private ZonedDateTime expireAt;
+    private LocalDateTime expireAt;
 
     @Getter
-    private ZonedDateTime signAt;
+    private LocalDateTime signAt;
 
     @Getter
     private Map<String, Object> properties;

@@ -1,7 +1,7 @@
 package com.example.demo.util;
 
 import com.example.demo.common.Consts;
-import com.example.demo.context.ServiceContext;
+import com.huagui.common.base.context.ServiceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

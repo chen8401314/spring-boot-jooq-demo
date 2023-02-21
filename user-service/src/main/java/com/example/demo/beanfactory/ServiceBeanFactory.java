@@ -1,17 +1,16 @@
 package com.example.demo.beanfactory;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.example.demo.config.MinIOProperties;
 import com.example.demo.config.MinIOTemplate;
-import com.example.demo.context.ServiceContext;
-import com.example.demo.context.ThreadLocalContextAccessor;
-import com.example.demo.context.UserToken;
 import com.example.demo.handler.DefaultServiceExceptionHandler;
 import com.example.demo.util.HttpReqUtil;
-import com.example.demo.util.JWTUtils;
+import com.huagui.common.base.context.ServiceContext;
+import com.huagui.common.base.context.ThreadLocalContextAccessor;
+import com.huagui.common.base.context.UserToken;
+import com.huagui.common.base.util.JWTUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.ThreadContext;
@@ -39,7 +38,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.example.demo.context.ServiceContext.*;
+import static com.huagui.common.base.context.ServiceContext.*;
 
 
 /**
@@ -179,19 +178,19 @@ public class ServiceBeanFactory implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedHeaders("*").allowedMethods("*")
                 .maxAge(3600).allowedOrigins("*").allowCredentials(true)
-                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS","HEAD");
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD");
     }
 
     private void setServiceContext(ServiceContext sc) {
         ThreadContext.put(TRACE_ID_HEADER, sc.getTraceId());
-        ThreadContext.put(USER_NAME, sc.getUserName());
+        ThreadContext.put(USER_NAME, sc.getLoginName());
         ThreadLocalContextAccessor.setServiceContext(sc);
     }
 
     @Bean
-    public CorsFilter corsFilter()
-    {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();  CorsConfiguration corsConfiguration = new CorsConfiguration();
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedOrigin("http://localhost:8080");
@@ -204,7 +203,7 @@ public class ServiceBeanFactory implements WebMvcConfigurer {
     //如果配置文件中有  minio.enable属性，且值为true，代表该方法会执行，否则不会执行
     @ConditionalOnProperty(prefix = "minio", value = "enable", havingValue = "true")
     public MinIOTemplate minIOTemplate(MinIOProperties minIOProperties) {
-        return new MinIOTemplate( minIOProperties);
+        return new MinIOTemplate(minIOProperties);
     }
 
     @Bean

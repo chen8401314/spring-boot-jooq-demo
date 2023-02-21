@@ -2,15 +2,15 @@ package com.example.demo.controller;
 
 
 import com.example.demo.common.Response;
-import com.example.demo.context.ThreadLocalContextAccessor;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.request.LoginReq;
 import com.example.demo.service.UserService;
 import com.example.demo.util.HttpReqUtil;
-import com.example.demo.util.JWTUtils;
 import com.example.demo.util.SecurityUtil;
 import com.google.common.base.Throwables;
+import com.huagui.common.base.context.ThreadLocalContextAccessor;
+import com.huagui.common.base.util.JWTUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

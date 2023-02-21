@@ -27,7 +27,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.example.demo.context.ServiceContext.TOKEN_HEADER;
+import static com.huagui.common.base.context.ServiceContext.TOKEN_HEADER;
+
 
 @Configuration
 @EnableSwagger2
