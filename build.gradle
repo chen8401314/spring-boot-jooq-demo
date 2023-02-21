@@ -6,12 +6,12 @@ buildscript {
             name = "shanghai"
             url = project.ext.repositoryUrl
         }
-        maven {url 'https://maven.aliyun.com/repository/public/'}
-        maven {url 'https://maven.aliyun.com/repository/spring/'}
-        maven {url 'https://maven.aliyun.com/repository/central/'}
-        maven {url 'https://maven.aliyun.com/repository/google/'}
-        maven {url 'https://maven.aliyun.com/repository/gradle-plugin/'}
-        maven {url 'https://maven.aliyun.com/repository/spring-plugin/'}
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        maven { url 'https://maven.aliyun.com/repository/central/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
         mavenCentral()
     }
 
@@ -54,7 +54,7 @@ subprojects {
 
     dependencyManagement {
         imports {
-           // mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+            // mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
             mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
         }
@@ -90,8 +90,9 @@ subprojects {
     }
 
 
+    def profile = System.getProperty("profile") ?: "dev"
 
-    def env = System.getProperty("profile") ?: "dev"
+    def webServiceProjects = ['user-service']
 
     sourceSets {
         main {
@@ -99,11 +100,10 @@ subprojects {
                 srcDirs = ["src/main/java", "build/generated/sources/annotationProcessor/java/main"]
             }
             resources {
-                srcDirs = ["src/main/resources", "src/main/profile/$env"]
+                srcDirs = ["src/main/resources", "src/main/profile/$profile"]
             }
         }
     }
-
 
 
     configurations {
@@ -120,45 +120,76 @@ subprojects {
             name = "shanghai"
             url = project.ext.repositoryUrl
         }
-        maven {url 'https://maven.aliyun.com/repository/public/'}
-        maven {url 'https://maven.aliyun.com/repository/spring/'}
-        maven {url 'https://maven.aliyun.com/repository/central/'}
-        maven {url 'https://maven.aliyun.com/repository/google/'}
-        maven {url 'https://maven.aliyun.com/repository/gradle-plugin/'}
-        maven {url 'https://maven.aliyun.com/repository/spring-plugin/'}
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        maven { url 'https://maven.aliyun.com/repository/central/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
         mavenCentral()
     }
 
 
-
     dependencies {
-
-
         implementation "ch.qos.logback:logback-classic:${logbackVersion}"
         implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4jVersion}"
         implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
         implementation("io.jsonwebtoken:jjwt:${jjwtVersion}") {
             exclude group: "com.fasterxml.jackson.core"
         }
-        implementation "org.apache.commons:commons-collections4:${commonsCollections4Version}"
-        implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
         implementation "javax.xml.bind:jaxb-api:${jaxbVersion}"
-
 
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-        implementation "org.mapstruct:mapstruct:${mapStructVersion}"
-        annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+        //webService项目依赖
+        if (webServiceProjects.contains(project.name)) {
+            implementation project(":base-common")
+            implementation "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
+            implementation "com.baomidou:mybatis-plus-generator:${mybatisPlusVersion}"
+            implementation "com.alibaba:druid:${druidVersion}"
+            implementation "javax.validation:validation-api:${validationVersion}"
+            implementation "org.hibernate:hibernate-validator:${hibernateValidationVersion}"
+            implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+            implementation "com.github.xiaoymin:swagger-bootstrap-ui:${swaggerUiVersion}"
+            implementation "mysql:mysql-connector-java:${mysqlVersion}"
+            implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+            implementation "cn.hutool:hutool-core:${hutoolVersion}"
 
+            api("io.springfox:springfox-swagger2:${swaggerVersion}") {
+                exclude group: "com.google.guava", module: "guava"
+                exclude group: "org.slf4j", module: "slf4j-api"
+                exclude group: "com.fasterxml.jackson.core"
+            }
+            implementation "io.minio:minio:${minioVersion}"
+
+            implementation "org.mapstruct:mapstruct:${mapStructVersion}"
+            annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+
+            testImplementation("org.springframework.boot:spring-boot-starter-test") {
+                exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+            }
+
+            if ("dev" == profile || "debug" == profile) {
+                api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
+                    exclude group: "com.netflix.hystrix"
+                    exclude group: "com.netflix.ribbon"
+                    exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-archaius"
+                    exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-ribbon"
+                    exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-ribbon"
+                    exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-hystrix"
+                }
+            } else {
+                api("org.springframework.cloud:spring-cloud-starter-kubernetes-client-all") {
+                    exclude group: "org.springframework.cloud", module: "spring-cloud-kubernetes-ribbon"
+                }
+            }
+
+        }
         implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
         implementation "de.codecentric:spring-boot-admin-starter-client:${springBootVersion}"
         implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
 
-
-        testImplementation("org.springframework.boot:spring-boot-starter-test") {
-            exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-        }
     }
 
     test {

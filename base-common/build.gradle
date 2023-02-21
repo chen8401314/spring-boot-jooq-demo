@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    api "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
     api "org.aspectj:aspectjweaver:${aspectjVersion}"
     api "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
