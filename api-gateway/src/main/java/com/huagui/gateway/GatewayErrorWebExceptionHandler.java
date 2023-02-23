@@ -2,8 +2,8 @@ package com.huagui.gateway;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.huagui.common.base.context.CommonException;
-import com.huagui.common.base.context.ServiceContext;
+import com.huagui.service.base.context.CommonException;
+import com.huagui.service.base.context.ServiceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

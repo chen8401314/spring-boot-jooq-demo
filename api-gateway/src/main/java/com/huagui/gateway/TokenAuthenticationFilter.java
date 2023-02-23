@@ -1,10 +1,10 @@
 package com.huagui.gateway;
 
 import com.google.common.base.Throwables;
-import com.huagui.common.base.context.CommonException;
-import com.huagui.common.base.context.ServiceContext;
-import com.huagui.common.base.context.UserToken;
-import com.huagui.common.base.util.JWTUtils;
+import com.huagui.service.base.context.CommonException;
+import com.huagui.service.base.context.ServiceContext;
+import com.huagui.service.base.context.UserToken;
+import com.huagui.service.base.util.JWTUtils;
 import com.huagui.service.config.LocalRedisCache;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -16,7 +16,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -27,8 +26,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -103,9 +101,8 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
         //validate the token
         UserToken user = JWTUtils.extractToken(jwtStr);
 
-        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
         // the Token is gonna expire in 4hours, help user to refresh token
-        if (now.plusHours(4).isAfter(user.getExpireAt())) {
+        if (LocalDateTime.now().plusHours(4).isAfter(user.getExpireAt())) {
             log.info("refreshUserToken +++++++++++++++++++++++++ refreshUserToken");
             return refreshUserToken(user, exchange, chain);
         }

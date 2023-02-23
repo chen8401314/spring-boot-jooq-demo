@@ -1,16 +1,15 @@
 package com.example.demo.service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.dto.UserDTO;
-import com.example.demo.entity.UserEntity;
-import com.example.demo.mapper.UserMapper;
-import com.example.demo.service.UserService;
+import com.example.demo.jooq.tables.daos.UserDao;
+import com.example.demo.jooq.tables.pojos.UserEntity;
+import com.example.demo.jooq.tables.records.UserRecord;
+import com.huagui.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.demo.convert.UserConvert.USER_CONVERT;
+import java.util.List;
 
 /**
  * <p>
@@ -23,16 +22,13 @@ import static com.example.demo.convert.UserConvert.USER_CONVERT;
 @Service
 @AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
-public class UserService extends ServiceImpl<UserMapper, UserEntity> {
+public class UserService extends ServiceImpl<UserDao, UserEntity, UserRecord> {
 
-    private final UserMapper userMapper;
+    UserDao userDao;
 
     public UserEntity findByUsername(String username) {
-        return userMapper.findByUsername(username);
+        List<UserEntity> list = userDao.fetchByUsernameTable(username);
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
     }
 
-    public UserDTO findById(String id) {
-        UserEntity userEntity = getById(id);
-        return USER_CONVERT.toDTO(userEntity);
-    }
 }

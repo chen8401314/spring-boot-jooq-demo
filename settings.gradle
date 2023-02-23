@@ -1,3 +1,5 @@
+include 'custom-generator'
+project(':custom-generator').projectDir = new File(settingsDir, './custom-generator')
 include 'api-gateway'
 project(':api-gateway').projectDir = new File(settingsDir, './api-gateway')
 include 'eureka'
@@ -6,3 +8,5 @@ include 'user-service'
 project(':user-service').projectDir = new File(settingsDir, './user-service')
 include 'base-common'
 project(':base-common').projectDir = new File(settingsDir, './base-common')
+include 'registry-client'
+project(':registry-client').projectDir = new File(settingsDir, './registry-client')

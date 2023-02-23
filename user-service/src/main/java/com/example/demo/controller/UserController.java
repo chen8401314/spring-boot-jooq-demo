@@ -3,8 +3,9 @@ package com.example.demo.controller;
 
 import com.example.demo.common.Response;
 import com.example.demo.dto.UserDTO;
-import com.example.demo.entity.UserEntity;
+import com.example.demo.jooq.tables.pojos.UserEntity;
 import com.example.demo.request.LoginReq;
+import com.example.demo.request.UserReq;
 import com.example.demo.service.UserService;
 import com.example.demo.util.HttpReqUtil;
 import com.example.demo.util.SecurityUtil;
@@ -16,15 +17,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.example.demo.common.Response.DEFAULT_CODE_SUCCESS;
+import static com.example.demo.mapper.UserMapper.USER_MAPPER;
 
 /**
  * <p>
@@ -45,7 +45,9 @@ public class UserController {
 
     @ApiOperation(value = "保存user")
     @PostMapping(value = "/save")
-    public Response<String> save(@RequestBody UserEntity user) {
+    public Response<String> save(@RequestBody UserReq req) {
+        UserEntity user = new UserEntity();
+        user.setUsername(req.getUsername());
         user.setPassword(SecurityUtil.getMD5(user.getPassword()));
         userService.save(user);
         return Response.success();
@@ -86,7 +88,7 @@ public class UserController {
     @GetMapping(value = "/getUserInfo")
     @ApiOperation(value = "获取登录用户信息")
     public Response<UserDTO> getUserInfo() {
-        return Response.success(userService.findById(ThreadLocalContextAccessor.getUserID()));
+        return Response.success(USER_MAPPER.toDTO(userService.findById(ThreadLocalContextAccessor.getUserID())));
     }
 
 }

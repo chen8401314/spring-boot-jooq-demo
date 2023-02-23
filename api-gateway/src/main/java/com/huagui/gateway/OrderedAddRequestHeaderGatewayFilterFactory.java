@@ -1,6 +1,6 @@
 package com.huagui.gateway;
 
-import com.huagui.common.base.context.ServiceContext;
+import com.huagui.service.base.context.ServiceContext;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;

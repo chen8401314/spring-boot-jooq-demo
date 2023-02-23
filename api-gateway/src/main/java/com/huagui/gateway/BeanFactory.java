@@ -1,7 +1,7 @@
 package com.huagui.gateway;
 
 
-import com.huagui.common.base.util.JsonObjectConverter;
+import com.huagui.service.base.util.JsonObjectConverter;
 import com.huagui.service.config.LocalRedisCache;
 import com.huagui.service.config.RedisConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;

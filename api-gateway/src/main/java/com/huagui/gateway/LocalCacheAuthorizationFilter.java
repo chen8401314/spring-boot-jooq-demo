@@ -1,8 +1,8 @@
 package com.huagui.gateway;
 
 
-import com.huagui.common.base.context.CommonException;
-import com.huagui.common.base.context.UserToken;
+import com.huagui.service.base.context.CommonException;
+import com.huagui.service.base.context.UserToken;
 import com.huagui.service.config.LocalRedisCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

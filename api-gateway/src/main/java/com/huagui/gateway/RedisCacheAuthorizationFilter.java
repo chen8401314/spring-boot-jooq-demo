@@ -1,8 +1,8 @@
 package com.huagui.gateway;
 
 import com.google.common.base.Throwables;
-import com.huagui.common.base.context.CommonException;
-import com.huagui.common.base.context.UserToken;
+import com.huagui.service.base.context.CommonException;
+import com.huagui.service.base.context.UserToken;
 import com.huagui.service.config.LocalRedisCache;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;

@@ -1,10 +1,5 @@
 package com.example.demo.beanfactory;
 
-import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.example.demo.config.MinIOProperties;
-import com.example.demo.config.MinIOTemplate;
 import com.example.demo.handler.DefaultServiceExceptionHandler;
 import com.example.demo.util.HttpReqUtil;
 import com.huagui.common.base.context.ServiceContext;
@@ -15,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +40,7 @@ import static com.huagui.common.base.context.ServiceContext.*;
  */
 @Slf4j
 @Configuration
-@EnableConfigurationProperties({MinIOProperties.class})
+@EnableConfigurationProperties
 public class ServiceBeanFactory implements WebMvcConfigurer {
 
     @Value("${spring.application.name}")
@@ -130,7 +124,7 @@ public class ServiceBeanFactory implements WebMvcConfigurer {
     }
 
     Optional<ServiceContext> buildContextFromEncryptedToken(HttpServletRequest request) {
-        UserToken user = JWTUtils.extractToken(request.getHeader(ServiceContext.TOKEN_HEADER));
+        UserToken user = JWTUtils.extractToken(request.getHeader(TOKEN_HEADER));
         return Optional.of(new ServiceContext(user, UUID.randomUUID().toString()));
     }
 
@@ -197,20 +191,6 @@ public class ServiceBeanFactory implements WebMvcConfigurer {
         corsConfiguration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
-    }
-
-    @Bean
-    //如果配置文件中有  minio.enable属性，且值为true，代表该方法会执行，否则不会执行
-    @ConditionalOnProperty(prefix = "minio", value = "enable", havingValue = "true")
-    public MinIOTemplate minIOTemplate(MinIOProperties minIOProperties) {
-        return new MinIOTemplate(minIOProperties);
-    }
-
-    @Bean
-    public MybatisPlusInterceptor mybatisPlusInterceptor() {
-        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
-        return interceptor;
     }
 
 

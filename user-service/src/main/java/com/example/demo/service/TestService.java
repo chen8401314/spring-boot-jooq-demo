@@ -1,16 +1,16 @@
 package com.example.demo.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.dto.TestDTO;
-import com.example.demo.entity.TestEntity;
-import com.example.demo.mapper.TestMapper;
+import com.example.demo.jooq.tables.daos.TestDao;
+import com.example.demo.jooq.tables.pojos.TestEntity;
+import com.example.demo.jooq.tables.records.TestRecord;
+import com.example.demo.repository.TestRep;
+import com.example.demo.request.QueryUserReq;
+import com.huagui.service.dto.Page;
+import com.huagui.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.example.demo.convert.TestConvert.TEST_CONVERT;
 
 /**
  * <p>
@@ -23,27 +23,10 @@ import static com.example.demo.convert.TestConvert.TEST_CONVERT;
 @Service
 @AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
-public class TestService extends ServiceImpl<TestMapper, TestEntity> {
-    private final TestMapper testMapper;
+public class TestService extends ServiceImpl<TestDao, TestEntity, TestRecord> {
+    TestRep testRep;
 
-    public IPage<TestEntity> findPage(String name, Page<TestEntity> page) {
-        return testMapper.findPage(page, name);
-    }
-
-    public IPage<TestDTO> findPageDTO(String name, Page<TestEntity> page) {
-        return testMapper.findPageDTO(page, name);
-    }
-
-    public TestDTO findById(String id) {
-        return testMapper.findById(id);
-    }
-
-    public Page<TestDTO> selectPage(String name, Page<TestEntity> page) {
-        IPage<TestEntity> result = testMapper.findPageTest(page, name);
-        return TEST_CONVERT.toPageDTO(result);
-    }
-
-    public IPage<TestDTO> selectPage1(String name, Page<TestDTO> page) {
-        return testMapper.selectPage1(page, name);
+    public Page<TestDTO> findPageByName(QueryUserReq req) {
+        return testRep.findPageByName(req);
     }
 }

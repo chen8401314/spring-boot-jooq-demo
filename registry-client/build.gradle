@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+}
+
+sonarqube {
+    skipProject = true
+}
+
+dependencies {
+
+    def profile = System.getProperty("profile") ?: "dev"
+
+    api "org.mapstruct:mapstruct:${mapStructVersion}"
+    api "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    api "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    api "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    api "org.springframework.boot:spring-boot-starter-jooq:${springBootVersion}"
+
+    api "com.alibaba:druid:${druidVersion}"
+    api "javax.validation:validation-api:${validationVersion}"
+    api "org.hibernate:hibernate-validator:${hibernateValidationVersion}"
+
+    api("io.springfox:springfox-swagger2:${swaggerVersion}") {
+        exclude group: "com.google.guava", module: "guava"
+        exclude group: "org.slf4j", module: "slf4j-api"
+        exclude group: "com.fasterxml.jackson.core"
+    }
+    api "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    api "com.github.xiaoymin:swagger-bootstrap-ui:${swaggerUiVersion}"
+
+
+    api "mysql:mysql-connector-java:${mysqlVersion}"
+    api "cn.hutool:hutool-core:${hutoolVersion}"
+    api "io.minio:minio:${minioVersion}"
+
+    if ("dev" == profile || "debug" == profile) {
+        api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
+            exclude group: "com.netflix.hystrix"
+            exclude group: "com.netflix.ribbon"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-archaius"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-ribbon"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-ribbon"
+            exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-hystrix"
+        }
+    } else {
+        api("org.springframework.cloud:spring-cloud-starter-kubernetes-client-all") {
+            exclude group: "org.springframework.cloud", module: "spring-cloud-kubernetes-ribbon"
+        }
+    }
+}
+jar.enabled = true
+bootJar.enabled = false

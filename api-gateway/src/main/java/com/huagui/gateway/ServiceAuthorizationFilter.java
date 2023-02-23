@@ -1,8 +1,8 @@
 package com.huagui.gateway;
 
-import com.huagui.common.base.ServiceName;
-import com.huagui.common.base.context.CommonException;
-import com.huagui.common.base.context.ServiceContext;
+import com.huagui.service.base.ServiceName;
+import com.huagui.service.base.context.CommonException;
+import com.huagui.service.base.context.ServiceContext;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
