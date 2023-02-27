@@ -12,4 +12,4 @@ repositories {
 dependencies {
 	implementation "org.jooq:jooq-codegen:${jooqVersion}"
 }
-
+bootJar.enabled = false
