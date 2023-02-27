@@ -1,9 +1,9 @@
 package com.huagui.gateway;
 
 
-import com.huagui.service.base.util.JsonObjectConverter;
-import com.huagui.service.config.LocalRedisCache;
-import com.huagui.service.config.RedisConfig;
+import com.huagui.common.base.util.JsonObjectConverter;
+import com.huagui.common.config.LocalRedisCache;
+import com.huagui.common.config.RedisConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import lombok.extern.slf4j.Slf4j;
