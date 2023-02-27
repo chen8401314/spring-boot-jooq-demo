@@ -8,5 +8,5 @@ include 'user-service'
 project(':user-service').projectDir = new File(settingsDir, './user-service')
 include 'base-common'
 project(':base-common').projectDir = new File(settingsDir, './base-common')
-include 'registry-client'
-project(':registry-client').projectDir = new File(settingsDir, './registry-client')
+include 'common-service'
+project(':common-service').projectDir = new File(settingsDir, './common-service')

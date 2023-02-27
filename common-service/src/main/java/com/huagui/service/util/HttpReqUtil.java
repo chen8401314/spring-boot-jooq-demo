@@ -1,6 +1,5 @@
-package com.example.demo.util;
+package com.huagui.service.util;
 
-import com.example.demo.common.Consts;
 import com.huagui.common.base.context.ServiceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

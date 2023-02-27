@@ -10,6 +10,7 @@ dependencies {
 
     def profile = System.getProperty("profile") ?: "dev"
 
+    api project(':base-common')
     api "org.mapstruct:mapstruct:${mapStructVersion}"
     api "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     api "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"

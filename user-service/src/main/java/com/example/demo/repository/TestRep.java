@@ -5,6 +5,7 @@ import com.example.demo.dto.TestDTO;
 import com.example.demo.jooq.tables.TestTable;
 import com.example.demo.request.QueryUserReq;
 import com.huagui.service.dto.Page;
+import com.huagui.service.repository.BaseRep;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;

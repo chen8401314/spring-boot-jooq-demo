@@ -143,8 +143,8 @@ subprojects {
         implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
         //webService项目依赖
         if (webServiceProjects.contains(project.name)) {
-            implementation project(":base-common")
-            implementation project(":registry-client")
+            //implementation project(":base-common")
+            implementation project(":common-service")
             annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
         }
     }

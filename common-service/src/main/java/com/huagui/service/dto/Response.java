@@ -1,5 +1,6 @@
-package com.example.demo.common;
+package com.huagui.service.dto;
 
+import com.huagui.service.enumeration.ExceptionEnum;
 import lombok.Getter;
 import lombok.Setter;
 

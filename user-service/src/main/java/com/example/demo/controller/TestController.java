@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.common.Response;
 import com.example.demo.dto.TestDTO;
 import com.example.demo.jooq.tables.pojos.TestEntity;
 import com.example.demo.request.QueryUserReq;
 import com.example.demo.request.TestReq;
 import com.example.demo.service.TestService;
 import com.huagui.service.dto.Page;
+import com.huagui.service.dto.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

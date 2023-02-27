@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.huagui.service.repository;
 
 import com.google.common.collect.Lists;
 import com.huagui.service.dto.Page;
@@ -33,7 +33,7 @@ public class BaseRep {
         if (total == 0) {
             return page;
         }
-        List<T> datas = dslContext.select(fields).from(table).where(condition).orderBy(CollectionUtils.isEmpty(orderFields) ? Lists.newArrayList() : orderFields).limit(pageReq.getSize()).offset((page.getPage() - 1) *  page.getSize()).fetchInto(clazz);
+        List<T> datas = dslContext.select(fields).from(table).where(condition).orderBy(CollectionUtils.isEmpty(orderFields) ? Lists.newArrayList() : orderFields).limit(pageReq.getSize()).offset((long)(page.getPage() - 1) *  (long)page.getSize()).fetchInto(clazz);
         page.setContent(datas);
         return page;
     }

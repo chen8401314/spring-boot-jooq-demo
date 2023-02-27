@@ -6,7 +6,7 @@
  * Description:
  * History:
  */
-package com.example.demo.common;
+package com.huagui.service.enumeration;
 
 import lombok.Getter;
 

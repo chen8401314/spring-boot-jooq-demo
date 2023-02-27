@@ -1,9 +1,8 @@
-package com.example.demo.handler;
+package com.huagui.service.handler;
 
-import com.example.demo.common.Response;
 import com.google.common.base.Throwables;
-
 import com.huagui.common.base.context.CommonException;
+import com.huagui.service.dto.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.core.annotation.AnnotationUtils;

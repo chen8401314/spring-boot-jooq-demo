@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.huagui.service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

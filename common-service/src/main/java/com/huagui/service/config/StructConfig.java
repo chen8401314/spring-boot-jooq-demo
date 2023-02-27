@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.huagui.service.config;
 
 import org.mapstruct.MapperConfig;
 import org.mapstruct.NullValueCheckStrategy;

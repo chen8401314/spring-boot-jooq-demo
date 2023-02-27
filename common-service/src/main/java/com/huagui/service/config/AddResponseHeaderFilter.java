@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.huagui.service.config;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

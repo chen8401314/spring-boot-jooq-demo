@@ -1,11 +1,11 @@
-package com.example.demo.beanfactory;
+package com.huagui.service.beanfactory;
 
-import com.example.demo.handler.DefaultServiceExceptionHandler;
-import com.example.demo.util.HttpReqUtil;
 import com.huagui.common.base.context.ServiceContext;
 import com.huagui.common.base.context.ThreadLocalContextAccessor;
 import com.huagui.common.base.context.UserToken;
 import com.huagui.common.base.util.JWTUtils;
+import com.huagui.service.handler.DefaultServiceExceptionHandler;
+import com.huagui.service.util.HttpReqUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.ThreadContext;

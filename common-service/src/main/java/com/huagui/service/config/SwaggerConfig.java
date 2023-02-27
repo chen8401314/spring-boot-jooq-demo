@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.huagui.service.config;
 
 import com.google.common.collect.Lists;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;

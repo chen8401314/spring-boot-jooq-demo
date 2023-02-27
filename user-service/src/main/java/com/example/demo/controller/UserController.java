@@ -1,17 +1,17 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.common.Response;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.jooq.tables.pojos.UserEntity;
 import com.example.demo.request.LoginReq;
 import com.example.demo.request.UserReq;
 import com.example.demo.service.UserService;
-import com.example.demo.util.HttpReqUtil;
 import com.example.demo.util.SecurityUtil;
 import com.google.common.base.Throwables;
 import com.huagui.common.base.context.ThreadLocalContextAccessor;
 import com.huagui.common.base.util.JWTUtils;
+import com.huagui.service.dto.Response;
+import com.huagui.service.util.HttpReqUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.example.demo.common.Response.DEFAULT_CODE_SUCCESS;
 import static com.example.demo.mapper.UserMapper.USER_MAPPER;
+import static com.huagui.service.dto.Response.DEFAULT_CODE_SUCCESS;
 
 /**
  * <p>
