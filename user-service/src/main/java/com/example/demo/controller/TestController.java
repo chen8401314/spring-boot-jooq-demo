@@ -3,7 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.TestDTO;
 import com.example.demo.jooq.tables.pojos.TestEntity;
-import com.example.demo.request.QueryUserReq;
+import com.example.demo.request.QueryTestReq;
 import com.example.demo.request.TestReq;
 import com.example.demo.service.TestService;
 import com.huagui.service.dto.Page;
@@ -67,7 +67,7 @@ public class TestController {
 
     @ApiOperation(value = "根据name查询分页")
     @PostMapping(value = "/findPage")
-    public Response<Page<TestDTO>> findPageByName(@RequestBody QueryUserReq req) {
+    public Response<Page<TestDTO>> findPageByName(@RequestBody QueryTestReq req) {
         return Response.success(testService.findPageByName(req));
     }
 }

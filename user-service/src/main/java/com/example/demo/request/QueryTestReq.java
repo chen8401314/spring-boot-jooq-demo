@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class QueryUserReq extends PageReq {
+public class QueryTestReq extends PageReq {
 
     @ApiModelProperty(value = "名字")
     private String name;

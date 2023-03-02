@@ -5,6 +5,7 @@ import com.example.demo.jooq.tables.pojos.UserEntity;
 import com.example.demo.jooq.tables.records.UserRecord;
 import com.huagui.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +21,11 @@ import java.util.List;
  * @since 2020-11-09
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class UserService extends ServiceImpl<UserDao, UserEntity, UserRecord> {
 
-    UserDao userDao;
+    private final UserDao userDao;
 
     public UserEntity findByUsername(String username) {
         List<UserEntity> list = userDao.fetchByUsernameTable(username);
