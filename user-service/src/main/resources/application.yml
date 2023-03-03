@@ -3,7 +3,7 @@ server:
     context-path: /user
 spring:
   profiles:
-    active: dev
+    active: @profile@
   application:
     name: user-service
   mvc:

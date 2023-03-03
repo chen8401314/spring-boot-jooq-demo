@@ -23,6 +23,7 @@ buildscript {
     }
 }
 
+
 subprojects {
     buildscript {
         repositories {
@@ -101,10 +102,10 @@ subprojects {
         options.encoding = "UTF-8"
     }
 
-
     def profile = System.getProperty("profile") ?: "dev"
-
-
+    processResources {
+        filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [profile: profile]
+    }
     sourceSets {
         main {
             java {

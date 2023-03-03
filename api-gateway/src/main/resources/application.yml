@@ -7,26 +7,14 @@ spring:
   application:
     name: gateway
   profiles:
-    active: test
+    active: @profile@
   redis:
-    #    host: ${REDIS_HOST:redis-cluster-0}
-    cluster:
-      nodes: redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379
+    host: ${REDIS_HOST:localhost}
   main:
     allow-bean-definition-overriding: true
   codec:
     max-in-memory-size: 20MB
   cloud:
-    kubernetes:
-      enabled: true
-      reload:
-        enabled: true
-        monitoring-config-maps: true
-        strategy: refresh
-        mode: event
-      config:
-        name: ${spring.application.name}
-        namespace: loonshots-dev
     circuitbreaker:
       hystrix:
         enabled: false
@@ -36,16 +24,6 @@ spring:
       retry:
         enable: true
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allow-credentials: true
-            allowed-origin-patterns: ${CORS_ALLOWED_ORIGINS:http://ui.devk.huagui.com.cn,https://ui.devk.huagui.com.cn}
-            allowed-headers: "*"
-            allowed-methods: "*"
-            max-age: 18000
-            exposed-headers:
-              - Authorization
       routes:
         - id: huagui-user-anonymous
           order: 0
@@ -94,6 +72,14 @@ spring:
             - Path=/bimdata/**
           filters:
             - OrderedAddRequestHeader=anonymous, TRUE
+eureka: #eureka配置
+  client:
+    fetch-registry: true
+    filter-only-up-instances: true
+    register-with-eureka: ${REGISTER_EUREKA:true}
+  instance:
+    prefer-ip-address: true
+
 management:
   endpoints:
     web:

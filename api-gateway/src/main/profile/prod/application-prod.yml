@@ -1,0 +1,27 @@
+spring:
+  redis:
+    cluster:
+      nodes: redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379
+  cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: true
+        monitoring-config-maps: true
+        strategy: refresh
+        mode: event
+      config:
+        name: ${spring.application.name}
+        namespace: loonshots-dev
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: true
+            allowed-origin-patterns: ${CORS_ALLOWED_ORIGINS:http://ui.devk.huagui.com.cn,https://ui.devk.huagui.com.cn}
+            allowed-headers: "*"
+            allowed-methods: "*"
+            max-age: 18000
+            exposed-headers:
+              - Authorization
+

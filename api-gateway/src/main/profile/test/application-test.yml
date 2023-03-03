@@ -1,0 +1,26 @@
+timeoutSecond: ${TIMEOUT_SECOND:180}
+server:
+  port: 8080
+  servlet:
+    context-path: /gateway
+spring:
+  redis:
+    host: redis
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: false
+            allowed-origin-patterns: "*"
+            allowed-headers: "*"
+            allowed-methods: "*"
+            max-age: 18000
+            exposed-headers:
+              - Authorization
+eureka: #eureka配置
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOST:bim-eureka.huagui.com.cn}/eureka
+
+

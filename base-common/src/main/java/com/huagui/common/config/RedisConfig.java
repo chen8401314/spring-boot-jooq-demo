@@ -123,13 +123,13 @@ public class RedisConfig {
     }
 
     @Bean
-    @Profile({"dev", "debug"})
+    @Profile({"dev", "test"})
     public ClientOptions clientOptions() {
         return ClientOptions.create();
     }
 
     @Bean
-    @Profile({"dev", "debug"})
+    @Profile({"dev", "test"})
     public LettuceConnectionFactory redisConnectionFactory(LettuceClientConfiguration lettucePoolConfig) {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
         if (!StringUtils.isEmpty(password)) {
@@ -139,7 +139,7 @@ public class RedisConfig {
     }
 
     @Bean
-    @Profile("test")
+    @Profile("prod")
     ClusterClientOptions clusterClientOptions() {
         // 支持自适应集群拓扑刷新和动态刷新源
         ClusterTopologyRefreshOptions clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
@@ -154,13 +154,13 @@ public class RedisConfig {
     }
 
     @Bean
-    @Profile("test")
+    @Profile("prod")
     ClusterConfigurationProperties clusterProperties() {
         return new ClusterConfigurationProperties();
     }
 
     @Bean
-    @Profile("test")
+    @Profile("prod")
     public LettuceConnectionFactory redisClusterConnectionFactory(LettuceClientConfiguration lettucePoolConfig) {
         RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration(clusterProperties().getNodes());
         if (!StringUtils.isEmpty(password)) {
