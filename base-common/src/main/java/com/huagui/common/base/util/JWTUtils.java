@@ -13,8 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,12 +21,14 @@ import java.util.Map;
 @Slf4j
 public class JWTUtils {
 
-    private JWTUtils() {}
+    private JWTUtils() {
+    }
 
     static String keyStr;
+
     static {
         String key = System.getenv("KEYSTROKE");
-        if(key == null || key.trim().isEmpty()) {
+        if (key == null || key.trim().isEmpty()) {
             key = "ThIsIsAsEcUrItYkEy";
         }
         keyStr = Base64.getEncoder().encodeToString(key.trim().getBytes(StandardCharsets.UTF_8));
@@ -41,22 +41,22 @@ public class JWTUtils {
     private static final DeflateCompressionCodec deflateCodec = new DeflateCompressionCodec();
 
     public static String createToken(String id, String loginName) {
-        return createToken(id, loginName, null, ZonedDateTime.now(ZoneOffset.UTC).plusHours(16L), signatureAlgorithm256);
+        return createToken(id, loginName, null, LocalDateTime.now().plusHours(16L), signatureAlgorithm256);
     }
 
 
-    public static String createToken(String id, String loginName, Map<String, Object> claims, ZonedDateTime expireDate) {
+    public static String createToken(String id, String loginName, Map<String, Object> claims, LocalDateTime expireDate) {
         return createToken(id, loginName, claims, expireDate, signatureAlgorithm256);
     }
 
-    public static String createToken(String id, String loginName, Map<String, Object> claims, ZonedDateTime expireDate, SignatureAlgorithm algo) {
+    public static String createToken(String id, String loginName, Map<String, Object> claims, LocalDateTime expireDate, SignatureAlgorithm algo) {
         return Jwts.builder()
                 .signWith(algo, keyStr)
                 .setClaims(claims == null ? new DefaultClaims() : claims)
                 .setId(id)
                 .setSubject(loginName)
-                .setIssuedAt(Date.from(ZonedDateTime.now(ZoneOffset.UTC).toInstant()))
-                .setExpiration(Date.from(expireDate.toInstant()))
+                .setIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .setExpiration(Date.from(expireDate.atZone(ZoneId.systemDefault()).toInstant()))
                 .compressWith(deflateCodec)
                 .compact();
     }

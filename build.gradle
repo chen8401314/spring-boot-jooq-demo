@@ -1,3 +1,4 @@
+import java.util.concurrent.atomic.AtomicReference
 buildscript {
     repositories {
         mavenLocal()
@@ -143,8 +144,12 @@ subprojects {
         implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
         //webService项目依赖
         if (webServiceProjects.contains(project.name)) {
-            //implementation project(":base-common")
             implementation project(":common-service")
+
+            compileOnly project(':custom-generator')
+            jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+            jooqGenerator project(':custom-generator')
+            jooqGenerator "org.jooq:jooq-meta-extensions:${jooqVersion}"
             annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
         }
     }
@@ -197,12 +202,20 @@ subprojects {
             }
         }
         tasks.named('generateJooq').configure {
-            def out = new ByteArrayOutputStream()
+            // customize execution of the code generation tool (only show output if code generation failed)
+            AtomicReference<OutputStream> outRef = new AtomicReference()
             javaExecSpec = { JavaExecSpec s ->
-                s.standardOutput = out
-                s.errorOutput = out
+                outRef.set(new ByteArrayOutputStream())
+                s.standardOutput = outRef.get()
+                s.errorOutput = outRef.get()
                 s.ignoreExitValue = true
                 s.jvmArgs '-Xmx512M'
+            }
+            execResultHandler = { ExecResult r ->
+                def out = outRef.getAndSet(null)
+                if (r.exitValue != 0) {
+                    throw new RuntimeException('jOOQ source code generation failed:\n\n' + out.toString())
+                }
             }
         }
     }

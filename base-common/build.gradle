@@ -10,7 +10,7 @@ dependencies {
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}") {
         exclude group: 'com.fasterxml.jackson.core'
     }
-
+    api "org.apache.httpcomponents:httpclient:4.5.10"
 }
 jar.enabled = true
 bootJar.enabled = false

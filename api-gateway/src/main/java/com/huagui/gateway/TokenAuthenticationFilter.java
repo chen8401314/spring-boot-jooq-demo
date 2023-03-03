@@ -5,6 +5,7 @@ import com.huagui.common.base.context.CommonException;
 import com.huagui.common.base.context.ServiceContext;
 import com.huagui.common.base.context.UserToken;
 import com.huagui.common.base.util.JWTUtils;
+import com.huagui.common.base.util.SerializeUtil;
 import com.huagui.common.config.LocalRedisCache;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -104,27 +105,19 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
         // the Token is gonna expire in 4hours, help user to refresh token
         if (LocalDateTime.now().plusHours(4).isAfter(user.getExpireAt())) {
             log.info("refreshUserToken +++++++++++++++++++++++++ refreshUserToken");
-            return refreshUserToken(user, exchange, chain);
-        }
 
-//        Integer userAuthVersion = localAuthVersion.getValue(user.getId());
-//        if (userAuthVersion == null) {
-//            // extract from redis
-//            return redisTemplate.opsForValue().get(user.getId())
-//                    .timeout(Duration.ofSeconds(1))
-//                    .transformDeferred(redisCircuitBreaker)
-//                    .onErrorResume(ex -> {
-//                        log.error("Can't access redis: {}", Throwables.getStackTraceAsString(ex));
-//                        return Mono.empty();
-//                    })
-//                    .defaultIfEmpty(user.getVersion().toString())
-//                    .map(Integer::parseInt)
-//                    .flatMap(version -> {
-//                        localAuthVersion.put(user.getId(), version);
-//                        return refreshTokenOrContinue(version, user, exchange, chain);
-//                    });
-//        }
-//        return refreshTokenOrContinue(userAuthVersion, user, exchange, chain);
+            String newToken = JWTUtils.createToken(user.getId(), user.getName());
+            domains.forEach(domain ->
+                    exchange.getResponse()
+                            .addCookie(ResponseCookie.from(ServiceContext.TOKEN_HEADER, newToken)
+                                    .domain(domain)
+                                    .path("/")
+                                    .httpOnly(true)
+                                    .build())
+            );
+            UserToken newUser = JWTUtils.extractToken(newToken);
+            return continueFilter(newUser, exchange, chain);
+        }
         return continueFilter(user, exchange, chain);
     }
 
@@ -137,7 +130,7 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
 
     Mono<Void> continueFilter(UserToken user, ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest newRequest = exchange.getRequest().mutate()
-                .header(ServiceContext.AUTHENTICATED_HEADER, user.toJson())
+                .header(ServiceContext.AUTHENTICATED_HEADER, SerializeUtil.serialize(user))
                 .build();
 
         ServerWebExchange newExchange = exchange.mutate()
@@ -149,7 +142,7 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
     Mono<Void> refreshUserToken(UserToken oldToken, ServerWebExchange exchange, GatewayFilterChain chain) {
         return client.get()
                 .uri(REFRESH_TOKEN_URL)
-                .header(ServiceContext.AUTHENTICATED_HEADER, oldToken.toJson())
+                .header(ServiceContext.AUTHENTICATED_HEADER, SerializeUtil.serialize(oldToken))
                 .retrieve().bodyToMono(String.class).timeout(Duration.ofSeconds(2))
                 .transformDeferred(authCircuitBreaker)
                 .onErrorResume(ex -> {
@@ -162,13 +155,12 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
                         return continueFilter(oldToken, exchange, chain);
                     }
                     domains.forEach(domain ->
-                                    exchange.getResponse()
-                                            .addCookie(ResponseCookie.from(ServiceContext.TOKEN_HEADER, newToken)
-                                                    .domain(domain)
-                                                    .path("/")
-                                                    .httpOnly(true)
-//                                    .secure(true)
-                                                    .build())
+                            exchange.getResponse()
+                                    .addCookie(ResponseCookie.from(ServiceContext.TOKEN_HEADER, newToken)
+                                            .domain(domain)
+                                            .path("/")
+                                            .httpOnly(true)
+                                            .build())
                     );
 
                     UserToken newUser = JWTUtils.extractToken(newToken);
