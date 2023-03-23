@@ -91,7 +91,7 @@ public class GatewayErrorWebExceptionHandler  implements ErrorWebExceptionHandle
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        response.setStatusCode(HttpStatus.OK);
+        response.setStatusCode(httpStatus);
         //基于流形式
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return response.writeAndFlushWith(Mono.just(ByteBufMono.just(dataBuffer)));
