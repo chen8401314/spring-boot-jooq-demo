@@ -125,8 +125,5 @@ public class JWTUtils {
     public static void main(String[] args) {
         String token = createToken("0210dd81c50b35b0da0bc4144186a5d7","test");
         System.out.println(token);
-        UserToken user = JWTUtils.extractToken(token);
-
-        System.out.println(user);
     }
 }
