@@ -1,4 +1,5 @@
 import java.util.concurrent.atomic.AtomicReference
+
 buildscript {
     repositories {
         mavenLocal()
@@ -47,20 +48,52 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: "io.spring.dependency-management"
-    apply plugin: "org.sonarqube"
+
     def webServiceProjects = ['user-service']
     if (webServiceProjects.contains(project.name)) {
         apply plugin: "nu.studer.jooq"
+        apply plugin: "org.sonarqube"
+
+        apply plugin: "jacoco"
+
+        jacoco {
+            toolVersion = "0.8.7"
+            reportsDir = file("$buildDir/customJacocoReportDir")
+        }
+        jacocoTestReport {
+            dependsOn test
+            group = "Reporting"
+            description = "Generate Jacoco coverage reports after running tests."
+            reports {
+                xml.enabled true
+                html.enabled true
+                //xml.destination file("${buildDir}/reports/jacoco.xml")
+            }
+            afterEvaluate {
+                getClassDirectories().setFrom(
+                        classDirectories.files.collect {
+                            fileTree(dir: it,
+                                    include: ['com/**/service/*', 'com/**/util/*'])
+                        }
+                )
+            }
+        }
+        test {
+            useJUnitPlatform()
+            finalizedBy jacocoTestReport
+        }
+
+        sonarqube {
+            properties {
+                property "sonar.sources", "src/main/java"
+                property "sonar.sourceEncoding", "UTF-8"
+            }
+        }
+        tasks['sonarqube'].dependsOn(jacocoTestReport)
     }
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 
-    sonarqube {
-        properties {
-            property "sonar.sources", "src/main/java"
-            property "sonar.sourceEncoding", "UTF-8"
-        }
-    }
 
     dependencyManagement {
         imports {
@@ -162,7 +195,8 @@ subprojects {
                         generator {
                             name = 'org.jooq.codegen.DefaultGenerator'
                             strategy {
-                                name = 'nu.studer.sample.SampleGeneratorStrategy'  // use the custom generator strategy
+                                name = 'nu.studer.sample.SampleGeneratorStrategy'
+                                // use the custom generator strategy
                             }
                             database {
                                 name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
@@ -221,8 +255,5 @@ subprojects {
         }
     }
 
-    test {
-        useJUnitPlatform()
-    }
 }
 

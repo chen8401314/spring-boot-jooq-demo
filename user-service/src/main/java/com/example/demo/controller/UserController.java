@@ -55,7 +55,7 @@ public class UserController {
 
     @PostMapping(value = "/anon/login")
     @ApiOperation(value = "用户登陆")
-    public Response login(@RequestBody @Validated LoginReq req, HttpServletResponse response) {
+    public Response<Void> login(@RequestBody @Validated LoginReq req, HttpServletResponse response) {
         try {
             // 对传入的密码进行解密
             UserEntity userEntity = userService.findByUsername(req.getUsername());
@@ -79,7 +79,7 @@ public class UserController {
 
     @GetMapping(value = "/logout")
     @ApiOperation(value = "用户登出")
-    public Response logout(HttpServletRequest request, HttpServletResponse response) {
+    public Response<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         // 暂时隐藏用户退出删除缓存操作
         HttpReqUtil.setTokenCookies("", response);
         return Response.success(DEFAULT_CODE_SUCCESS, "登出成功");

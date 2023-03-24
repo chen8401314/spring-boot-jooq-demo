@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.jooq.tables.daos.UserDao;
 import com.example.demo.jooq.tables.pojos.UserEntity;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,8 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
-public class UserServiceTest {
+class UserServiceTest {
 
     @InjectMocks
     UserService userService;
@@ -27,7 +27,7 @@ public class UserServiceTest {
     UserDao userDao;
 
     @BeforeEach
-    void setUp() throws Exception{
+    void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -39,7 +39,13 @@ public class UserServiceTest {
         List<UserEntity> list = List.of(userEntity);
         Mockito.when(userDao.fetchByUsernameTable("test"))
                 .thenReturn(list);
-        assertThat(userService.findByUsername("test").getUsername())
+        UserEntity user = userService.findByUsername("test");
+        assertThat(user.getUsername())
                 .isEqualTo("test");
+
+        Mockito.when(userDao.fetchByUsernameTable("test"))
+                .thenReturn(Lists.newArrayList());
+        UserEntity user1 = userService.findByUsername("test");
+        assertNull(user1);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.demo.util;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.ByteSource;
+import com.huagui.common.base.context.OperationException;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Random;
 import java.util.UUID;
@@ -58,10 +58,10 @@ public class SecurityUtil {
         try {
             MessageDigest messageDigest
                     = MessageDigest.getInstance(algorithm);
-            messageDigest.update(value.getBytes(Charsets.UTF_8.name()));
+            messageDigest.update(value.getBytes(StandardCharsets.UTF_8));
             return getFormattedText(messageDigest.digest());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OperationException(e.getMessage());
         }
     }
 
@@ -73,6 +73,10 @@ public class SecurityUtil {
             buf.append(HEX_DIGITS[bytes[j] & 0x0f]);
         }
         return buf.toString();
+    }
+
+    private SecurityUtil() {
+        throw new IllegalStateException("Utility class");
     }
 
 }

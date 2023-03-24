@@ -2,10 +2,6 @@ plugins {
     id 'java-library'
 }
 
-sonarqube {
-    skipProject = true
-}
-
 dependencies {
 
     def profile = System.getProperty("profile") ?: "dev"
