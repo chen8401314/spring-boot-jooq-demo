@@ -1,5 +1,6 @@
 package com.huagui.service.dto;
 
+import com.huagui.common.base.exception.BaseMsgInfo;
 import com.huagui.service.enumeration.ExceptionEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -119,6 +120,10 @@ public class Response<T> implements Serializable {
      */
     public static <T> Response<T> failure(int code, String message, T data) {
         return new Response<>(code, message, data);
+    }
+
+    public static <T> Response<T> failure(BaseMsgInfo msg) {
+        return new Response<>(msg.getCode(), msg.getMessage());
     }
 
     /**

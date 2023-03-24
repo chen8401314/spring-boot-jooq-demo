@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Set;
@@ -26,6 +28,24 @@ import java.util.Set;
 @ControllerAdvice
 @Slf4j
 public class DefaultServiceExceptionHandler extends ResponseEntityExceptionHandler {
+
+/*    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Response> defaultErrorHandler(HttpServletRequest req, Exception e) {
+        HttpStatus status = getStatus(req);
+        log.error(Throwables.getStackTraceAsString(e));
+        String localizeMsg = e.getMessage();
+        // If the exception is annotated with @ResponseStatus, extract it
+        ResponseStatus ann = AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class);
+
+        if (ann != null) {
+            status = ann.code();
+            if (!StringUtils.isEmpty(ann.reason())) {
+                localizeMsg = ann.reason();
+            }
+        }
+
+        return new ResponseEntity<>(Response.failure(status.value(), localizeMsg), status);
+    }*/
 
     @ExceptionHandler(value = CommonException.class)
     public ResponseEntity<Response<Void>> defaultExceptionHandler(CommonException e) {
@@ -81,6 +101,14 @@ public class DefaultServiceExceptionHandler extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers,
                                                                HttpStatus status, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Response.failure(status.value(), ex.getMessage()));
+    }
+
+    private HttpStatus getStatus(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        if (statusCode == null) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return HttpStatus.valueOf(statusCode);
     }
 
 }

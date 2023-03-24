@@ -24,5 +24,7 @@ public class UserReq {
     @NotEmpty
     private String username;
 
-
+    @ApiModelProperty(value = "登录密码")
+    @NotEmpty
+    private String password;
 }

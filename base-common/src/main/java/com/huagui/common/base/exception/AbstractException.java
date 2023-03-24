@@ -6,7 +6,9 @@
  * Description:
  * History:
  */
-package com.huagui.common.base.context;
+package com.huagui.common.base.exception;
+
+import lombok.Getter;
 
 /**
  * @author shenqicheng
@@ -17,8 +19,16 @@ public abstract class AbstractException extends RuntimeException {
 
     private static final long serialVersionUID = 1048410464172506448L;
 
+    @Getter
+    private BaseMsgInfo expMsg;
+
     public AbstractException() {
         super();
+    }
+
+    public AbstractException(BaseMsgInfo msg) {
+        super(msg.getMessage());
+        expMsg = msg;
     }
 
     public AbstractException(String message) {
@@ -33,5 +43,11 @@ public abstract class AbstractException extends RuntimeException {
         super(cause);
     }
 
+    /**
+     * 得到具体的错误枚举信息
+     *
+     * @return
+     */
+    public abstract BaseMsgInfo resolverExp();
 
 }

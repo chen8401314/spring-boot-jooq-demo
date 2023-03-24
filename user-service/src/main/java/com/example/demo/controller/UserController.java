@@ -11,6 +11,7 @@ import com.google.common.base.Throwables;
 import com.huagui.common.base.context.ThreadLocalContextAccessor;
 import com.huagui.common.base.util.JWTUtils;
 import com.huagui.service.dto.Response;
+import com.huagui.service.util.BaseUtil;
 import com.huagui.service.util.HttpReqUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,8 +48,9 @@ public class UserController {
     @PostMapping(value = "/save")
     public Response<String> save(@RequestBody UserReq req) {
         UserEntity user = new UserEntity();
+        user.setId(BaseUtil.getUUID());
         user.setUsername(req.getUsername());
-        user.setPassword(SecurityUtil.getMD5(user.getPassword()));
+        user.setPassword(SecurityUtil.getMD5(req.getPassword()));
         userService.save(user);
         return Response.success();
     }

@@ -1,5 +1,8 @@
 package com.huagui.common.base.context;
 
+import com.huagui.common.base.exception.AbstractException;
+import com.huagui.common.base.exception.BaseMsgInfo;
+import com.huagui.common.base.exception.MessageStatusEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -17,6 +20,9 @@ public class OperationException extends AbstractException {
 
     public OperationException(){}
 
+    public OperationException(BaseMsgInfo msg) {
+        super(msg);
+    }
 
     public OperationException(String message) {
         super(message);
@@ -33,6 +39,11 @@ public class OperationException extends AbstractException {
      */
     public OperationException(String format, Object... arguments){
         super(String.format(format, arguments));
+    }
+
+    @Override
+    public BaseMsgInfo resolverExp() {
+        return MessageStatusEnum.OPERATION;
     }
 
 }
