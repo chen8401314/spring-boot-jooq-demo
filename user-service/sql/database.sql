@@ -1,12 +1,12 @@
 CREATE TABLE pf_user
 (
-    id       CHAR(32) NOT NULL PRIMARY KEY,
+    id       CHAR(20) NOT NULL PRIMARY KEY,
     username VARCHAR(255) COMMENT '登录名',
     password VARCHAR(255) COMMENT '密码'
 );
 CREATE TABLE pf_test
 (
-    id         CHAR(32)     NOT NULL PRIMARY KEY,
+    id         CHAR(20)     NOT NULL PRIMARY KEY,
     created_dt DATETIME COMMENT '创建时间',
     created_by VARCHAR(255) NOT NULL default '' COMMENT '创建人',
     updated_dt DATETIME COMMENT '更新时间',

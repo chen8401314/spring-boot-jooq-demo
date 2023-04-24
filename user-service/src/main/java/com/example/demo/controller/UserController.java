@@ -13,6 +13,7 @@ import com.huagui.common.base.util.JWTUtils;
 import com.huagui.service.dto.Response;
 import com.huagui.service.util.BaseUtil;
 import com.huagui.service.util.HttpReqUtil;
+import com.huagui.service.util.IdWorker;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class UserController {
     @PostMapping(value = "/save")
     public Response<String> save(@RequestBody UserReq req) {
         UserEntity user = new UserEntity();
-        user.setId(BaseUtil.getUUID());
+        user.setId(IdWorker.getIdStr());
         user.setUsername(req.getUsername());
         user.setPassword(SecurityUtil.getMD5(req.getPassword()));
         userService.save(user);

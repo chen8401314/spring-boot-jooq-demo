@@ -1,15 +1,15 @@
 CREATE TABLE `pf_user`
 (
-    `id`       varchar(64) NOT NULL,
+    `id`       varchar(20) NOT NULL,
     `username` varchar(64) NOT NULL COMMENT '用户名',
     `password` varchar(64) NOT NULL COMMENT '密码',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 insert into `pf_user`(`id`, `username`, `password`)
-values ('0210dd81c50b35b0da0bc4144186a5d7', 'test', '96e79218965eb72c92a549dd5a330112');
+values ('1650347742230818817', 'test', '96e79218965eb72c92a549dd5a330112');
 CREATE TABLE `pf_test`
 (
-    `id`         varchar(64)  NOT NULL,
+    `id`         varchar(20)  NOT NULL,
     `created_dt` DATETIME(6) COMMENT '创建时间',
     `created_by` VARCHAR(255) NOT NULL default '' COMMENT '创建人',
     `updated_dt` DATETIME(6) COMMENT '更新时间',
