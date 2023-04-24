@@ -34,7 +34,7 @@ import java.util.List;
 import static com.huagui.gateway.FilterCommon.skipRequest;
 
 @Slf4j
-public class TokenAuthenticationFilter implements GlobalFilter, Ordered, CommandLineRunner {
+public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Autowired
     @Qualifier("localAuthVersion")
@@ -46,34 +46,16 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
     @Autowired
     CircuitBreakerConfig circuitBreakerConfig;
 
-    private CircuitBreakerOperator<String> authCircuitBreaker;
-
-    private WebClient client;
     static List<String> domains;
-    static String authService = "lb://user-service:";
-    private static final String REFRESH_TOKEN_URL = "/user/user/refreshToken";
 
     static {
-        String userServicePort = System.getenv("USER_SERVICE_PORT");
         String authCookieDomain = System.getenv("AUTH_COOKIE_DOMAIN");
         if (StringUtils.isEmpty(authCookieDomain)) {
             authCookieDomain = "localhost";
         }
-        if (StringUtils.isEmpty(userServicePort)) {
-            userServicePort = "8080";
-        }
         domains = Arrays.asList(authCookieDomain.split(","));
-        authService = String.format("%s%s", authService, userServicePort);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        this.client = adaptedWebClient
-                .baseUrl(authService)
-                .build();
-
-        authCircuitBreaker = CircuitBreakerOperator.of(CircuitBreaker.of("auth-refresh-token", circuitBreakerConfig));
-    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -121,12 +103,6 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
         return continueFilter(user, exchange, chain);
     }
 
-    Mono<Void> refreshTokenOrContinue(Integer version, UserToken user, ServerWebExchange exchange, GatewayFilterChain chain) {
-        if (version > user.getVersion()) {
-            return refreshUserToken(user, exchange, chain);
-        }
-        return continueFilter(user, exchange, chain);
-    }
 
     Mono<Void> continueFilter(UserToken user, ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest newRequest = exchange.getRequest().mutate()
@@ -137,36 +113,6 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered, Command
                 .request(newRequest).principal(Mono.just(user)).build();
 
         return chain.filter(newExchange);
-    }
-
-    Mono<Void> refreshUserToken(UserToken oldToken, ServerWebExchange exchange, GatewayFilterChain chain) {
-        return client.get()
-                .uri(REFRESH_TOKEN_URL)
-                .header(ServiceContext.AUTHENTICATED_HEADER, SerializeUtil.serialize(oldToken))
-                .retrieve().bodyToMono(String.class).timeout(Duration.ofSeconds(2))
-                .transformDeferred(authCircuitBreaker)
-                .onErrorResume(ex -> {
-                    log.error("Error in refresh user Token: {}", Throwables.getStackTraceAsString(ex));
-                    return Mono.empty();
-                })
-                .defaultIfEmpty("error")
-                .flatMap(newToken -> {
-                    if ("error".equals(newToken)) {
-                        return continueFilter(oldToken, exchange, chain);
-                    }
-                    domains.forEach(domain ->
-                            exchange.getResponse()
-                                    .addCookie(ResponseCookie.from(ServiceContext.TOKEN_HEADER, newToken)
-                                            .domain(domain)
-                                            .path("/")
-                                            .httpOnly(true)
-                                            .build())
-                    );
-
-                    UserToken newUser = JWTUtils.extractToken(newToken);
-//                    localAuthVersion.put(newUser.getId(), newUser.getVersion());
-                    return continueFilter(newUser, exchange, chain);
-                });
     }
 
     @Override

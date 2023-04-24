@@ -27,6 +27,7 @@ public class RequestCleanupFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         var request = exchange.getRequest();
         String path = FilterCommon.extractPath(request);
+        //这些接口过滤不让gateway访问
         if (blackUrl.contains(path)) {
             log.error("Accessing private uri {} from {}", path, Optional.ofNullable(request).map(ServerHttpRequest::getRemoteAddress).map(InetSocketAddress::getAddress).map(InetAddress::getHostAddress).orElse(""));
             return Mono.error(new CommonException(404, "Page doesn't exist"));

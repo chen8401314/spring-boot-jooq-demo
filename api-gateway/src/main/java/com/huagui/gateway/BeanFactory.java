@@ -49,20 +49,6 @@ public class BeanFactory implements WebFluxConfigurer {
                 .jackson2JsonEncoder(new Jackson2JsonEncoder(JsonObjectConverter.getObjectMapper()));
     }
 
-//    @Bean
-//    public WebFilter contextPathWebFilter() {
-//        return (exchange, chain) -> {
-//            ServerHttpRequest request = exchange.getRequest();
-//            if (request.getURI().getPath().startsWith(contextPath)) {
-//                return chain.filter(
-//                        exchange.mutate()
-//                                .request(request.mutate().contextPath(contextPath).build())
-//                                .build());
-//            }
-//            return chain.filter(exchange);
-//        };
-//    }
-
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter();
@@ -82,21 +68,6 @@ public class BeanFactory implements WebFluxConfigurer {
     OrderedAddRequestHeaderGatewayFilterFactory orderedAddRequestHeaderFactory() {
         return new OrderedAddRequestHeaderGatewayFilterFactory();
     }
-
-//    @Bean
-//    LocalCacheAuthorizationFilter localCacheAuthorizationFilter() {
-//        return new LocalCacheAuthorizationFilter();
-//    }
-//
-//    @Bean
-//    RedisCacheAuthorizationFilter redisCacheAuthorizationFilter() {
-//        return new RedisCacheAuthorizationFilter();
-//    }
-//
-//    @Bean
-//    ServiceAuthorizationFilter serviceAuthorizationFilter() {
-//        return new ServiceAuthorizationFilter();
-//    }
 
     @Bean("localAuthCache")
     public LocalRedisCache<String, Long, String> localAuthCache() {
