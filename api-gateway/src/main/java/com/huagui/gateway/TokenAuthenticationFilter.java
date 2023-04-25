@@ -1,19 +1,13 @@
 package com.huagui.gateway;
 
-import com.google.common.base.Throwables;
 import com.huagui.common.base.context.CommonException;
 import com.huagui.common.base.context.ServiceContext;
 import com.huagui.common.base.context.UserToken;
 import com.huagui.common.base.util.JWTUtils;
 import com.huagui.common.base.util.SerializeUtil;
-import com.huagui.common.config.LocalRedisCache;
-import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
-import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -26,7 +20,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -35,10 +28,6 @@ import static com.huagui.gateway.FilterCommon.skipRequest;
 
 @Slf4j
 public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
-
-    @Autowired
-    @Qualifier("localAuthVersion")
-    LocalRedisCache<String, Integer, String> localAuthVersion;
 
     @Autowired
     WebClient.Builder adaptedWebClient;

@@ -26,19 +26,5 @@ public interface FilterCommon {
         return Boolean.TRUE.equals(Boolean.valueOf(headers.getFirst(AUTHORIZED)));
     }
 
-    static ServerWebExchange buildAuthorizedExchange(ServerWebExchange exchange) {
-        ServerHttpRequest newRequest = exchange.getRequest().mutate()
-                .header(AUTHORIZED, Boolean.TRUE.toString())
-                .build();
 
-        return exchange.mutate()
-                .request(newRequest).build();
-    }
-
-    static Mono<Void> checkAuthorizationStatus(Boolean status, ServerWebExchange exchange, GatewayFilterChain chain) {
-        if (Boolean.TRUE.equals(status)) {
-            return chain.filter(buildAuthorizedExchange(exchange));
-        }
-        return chain.filter(exchange);
-    }
 }

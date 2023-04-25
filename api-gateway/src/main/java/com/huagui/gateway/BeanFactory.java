@@ -2,7 +2,6 @@ package com.huagui.gateway;
 
 
 import com.huagui.common.base.util.JsonObjectConverter;
-import com.huagui.common.config.LocalRedisCache;
 import com.huagui.common.config.RedisConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
@@ -67,55 +66,6 @@ public class BeanFactory implements WebFluxConfigurer {
     @Bean
     OrderedAddRequestHeaderGatewayFilterFactory orderedAddRequestHeaderFactory() {
         return new OrderedAddRequestHeaderGatewayFilterFactory();
-    }
-
-    @Bean("localAuthCache")
-    public LocalRedisCache<String, Long, String> localAuthCache() {
-        return new LocalRedisCache<>() {
-
-            @Override
-            protected String buildKey(String message) {
-                return message.split("@")[1];
-            }
-
-            @Override
-            protected Long buildValue(String message) {
-                return Long.parseLong(message.split("@")[0]);
-            }
-
-            @Override
-            public String[] getChannels() {
-                return new String[]{"USER_AUTHORIZATION"};
-            }
-
-        };
-    }
-
-    @Bean("localAuthVersion")
-    public LocalRedisCache<String, Integer, String> localAuthVersion() {
-        return new LocalRedisCache<>() {
-
-            @Override
-            protected String buildKey(String message) {
-                return message.split(":")[0];
-            }
-
-            @Override
-            protected Integer buildValue(String message) {
-                return Integer.parseInt(message.split(":")[1]);
-            }
-
-            @Override
-            public String[] getChannels() {
-                return new String[]{"USER_TOKEN_VERSION"};
-            }
-
-            @Override
-            protected int maxSize() {
-                return 1000000;
-            }
-
-        };
     }
 
     @Bean
