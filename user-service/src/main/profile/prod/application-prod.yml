@@ -1,4 +1,15 @@
 spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+      retry:
+        enabled: true #启动重试机制
+    kubernetes:
+      enabled: true
+      config:
+        name: ${spring.application.name}
+        namespace: ${NAMESPACE:dev}
   redis:
     cluster:
       nodes: redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379
