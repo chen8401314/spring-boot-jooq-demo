@@ -1,4 +1,7 @@
 spring:
+  redis:
+    cluster:
+      nodes: redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379
   datasource:
     url: jdbc:mysql://${MYSQL_IP}:${MYSQL_PORT}/user_service?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: ${MYSQL_USERNAME}
