@@ -1,7 +1,6 @@
 package com.huagui.gateway;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 public class AccessLogFilter implements GlobalFilter, Ordered {
@@ -213,7 +213,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
      * 记录响应日志
      * 通过 DataBufferFactory 解决响应体分段传输问题。
      */
-    private ServerHttpResponseDecorator recordResponseLog(ServerWebExchange exchange, GatewayLog gatewayLog) {
+  /*  private ServerHttpResponseDecorator recordResponseLog(ServerWebExchange exchange, GatewayLog gatewayLog) {
         ServerHttpResponse response = exchange.getResponse();
         DataBufferFactory bufferFactory = response.bufferFactory();
 
@@ -232,7 +232,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
                     String originalResponseContentType = exchange.getAttribute(ServerWebExchangeUtils.ORIGINAL_RESPONSE_CONTENT_TYPE_ATTR);
 
 
-                    if (ObjectUtils.equals(this.getStatusCode(), HttpStatus.OK)
+                    if (Objects.equals(this.getStatusCode(), HttpStatus.OK)
                             && StringUtils.isNotBlank(originalResponseContentType)
                             && originalResponseContentType.contains("application/json")) {
 
@@ -260,7 +260,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
                 return super.writeWith(body);
             }
         };
-    }
+    }*/
 
     public static String getIpAddress(ServerHttpRequest request) {
         HttpHeaders headers = request.getHeaders();
