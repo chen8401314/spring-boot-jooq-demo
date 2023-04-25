@@ -12,8 +12,6 @@ spring:
     host: ${REDIS_HOST:localhost}
   main:
     allow-bean-definition-overriding: true
-  codec:
-    max-in-memory-size: 20MB
   cloud:
     circuitbreaker:
       hystrix:

@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.codec.HttpMessageReader;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
@@ -25,6 +26,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.security.Principal;
 import java.time.Duration;
+import java.util.List;
 
 
 @Configuration(proxyBeanMethods = false)
@@ -63,6 +65,7 @@ public class BeanFactory implements WebFluxConfigurer {
         return new RequestCleanupFilter();
     }
 
+
     @Bean
     OrderedAddRequestHeaderGatewayFilterFactory orderedAddRequestHeaderFactory() {
         return new OrderedAddRequestHeaderGatewayFilterFactory();
@@ -96,9 +99,9 @@ public class BeanFactory implements WebFluxConfigurer {
                 .build());
     }
 
+
     @Bean
-    @LoadBalanced
-    public WebClient.Builder adaptedWebClient() {
-        return WebClient.builder();
+    public List<HttpMessageReader<?>> messageReaders(ServerCodecConfigurer codecConfigurer) {
+        return codecConfigurer.getReaders();
     }
 }

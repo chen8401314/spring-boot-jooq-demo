@@ -16,7 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.StringUtils;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -28,9 +27,6 @@ import static com.huagui.gateway.FilterCommon.skipRequest;
 
 @Slf4j
 public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
-
-    @Autowired
-    WebClient.Builder adaptedWebClient;
 
     @Autowired
     CircuitBreakerConfig circuitBreakerConfig;
@@ -74,7 +70,7 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
         UserToken user = JWTUtils.extractToken(jwtStr);
 
         // the Token is gonna expire in 4hours, help user to refresh token
-        if (LocalDateTime.now().plusHours(4).isAfter(user.getExpireAt())) {
+        if (LocalDateTime.now().plusHours(18).isAfter(user.getExpireAt())) {
             log.info("refreshUserToken +++++++++++++++++++++++++ refreshUserToken");
 
             String newToken = JWTUtils.createToken(user.getId(), user.getName());
