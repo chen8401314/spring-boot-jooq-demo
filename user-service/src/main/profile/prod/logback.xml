@@ -34,7 +34,7 @@
     <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_URL}</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"app_name":"api-gateway","system_name":"${SYSTEM_NAME}"}</customFields>
+            <customFields>{"app_name":"user-service","system_name":"${SYSTEM_NAME}"}</customFields>
         </encoder>
     </appender>
 
