@@ -41,7 +41,7 @@ public class JWTUtils {
     private static final DeflateCompressionCodec deflateCodec = new DeflateCompressionCodec();
 
     public static String createToken(String id, String loginName) {
-        return createToken(id, loginName, null, LocalDateTime.now().plusHours(16L), signatureAlgorithm256);
+        return createToken(id, loginName, null, LocalDateTime.now().plusHours(24L), signatureAlgorithm256);
     }
 
 

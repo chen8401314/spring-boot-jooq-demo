@@ -70,7 +70,7 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
         UserToken user = JWTUtils.extractToken(jwtStr);
 
         // the Token is gonna expire in 4hours, help user to refresh token
-        if (LocalDateTime.now().plusHours(18).isAfter(user.getExpireAt())) {
+        if (LocalDateTime.now().plusHours(16).isAfter(user.getExpireAt())) {
             log.info("refreshUserToken +++++++++++++++++++++++++ refreshUserToken");
 
             String newToken = JWTUtils.createToken(user.getId(), user.getName());
