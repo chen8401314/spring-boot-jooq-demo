@@ -133,7 +133,6 @@ public class ServiceBeanFactory implements WebMvcConfigurer {
         return new HandlerInterceptor() {
             @Override
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
                 if (request.getServletPath().contains("anon")) {
                     return true;
                 }

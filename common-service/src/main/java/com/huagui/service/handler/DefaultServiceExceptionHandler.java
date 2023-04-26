@@ -29,23 +29,6 @@ import java.util.Set;
 @Slf4j
 public class DefaultServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
-/*    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Response> defaultErrorHandler(HttpServletRequest req, Exception e) {
-        HttpStatus status = getStatus(req);
-        log.error(Throwables.getStackTraceAsString(e));
-        String localizeMsg = e.getMessage();
-        // If the exception is annotated with @ResponseStatus, extract it
-        ResponseStatus ann = AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class);
-
-        if (ann != null) {
-            status = ann.code();
-            if (!StringUtils.isEmpty(ann.reason())) {
-                localizeMsg = ann.reason();
-            }
-        }
-
-        return new ResponseEntity<>(Response.failure(status.value(), localizeMsg), status);
-    }*/
 
     @ExceptionHandler(value = CommonException.class)
     public ResponseEntity<Response<Void>> defaultExceptionHandler(CommonException e) {
@@ -101,14 +84,6 @@ public class DefaultServiceExceptionHandler extends ResponseEntityExceptionHandl
     public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers,
                                                                HttpStatus status, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Response.failure(status.value(), ex.getMessage()));
-    }
-
-    private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        if (statusCode == null) {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return HttpStatus.valueOf(statusCode);
     }
 
 }

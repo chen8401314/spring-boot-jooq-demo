@@ -6,6 +6,7 @@ import io.lettuce.core.cluster.ClusterClientOptions;
 import io.lettuce.core.cluster.ClusterTopologyRefreshOptions;
 import io.lettuce.core.resource.ClientResources;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceClientConfigurat
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 
@@ -93,11 +93,6 @@ public class RedisConfig {
     @Value("${spring.redis.port:6379}")
     private int redisPort;
 
-//    @Value("${spring.redis.database}")
-//    private String redisDatabase;
-//
-//    @Value("${spring.redis.url}")
-//    private String redisURL;
 
     @Value("${spring.redis.ioThreads:4}")
     private int ioThreads;
@@ -132,7 +127,7 @@ public class RedisConfig {
     @Profile({"dev", "test"})
     public LettuceConnectionFactory redisConnectionFactory(LettuceClientConfiguration lettucePoolConfig) {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
-        if (!StringUtils.isEmpty(password)) {
+        if (StringUtils.isNotEmpty(password)) {
             redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
         }
         return new LettuceConnectionFactory(redisStandaloneConfiguration, lettucePoolConfig);
@@ -186,10 +181,6 @@ public class RedisConfig {
     }
 
 
-    @Bean
-    public ResourceCacheDao resourceCacheDao() {
-        return new ResourceCacheDao();
-    }
 
 }
 

@@ -1,7 +1,6 @@
 package com.huagui.common.base.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,10 +26,7 @@ public class SerializeUtil {
      * @param str
      * @return
      */
-    public static byte[] stringToByte(String str) throws DecoderException {
-        //// 字符串、字节数组转换方式很多，可以根据自己的要求，自定义转换方式
-        //转换成hex
-        //return org.apache.commons.codec.binary.Hex.decodeHex(str);
+    public static byte[] stringToByte(String str) {
         //转换成base64
         return org.apache.commons.codec.binary.Base64.decodeBase64(str);
     }
@@ -68,5 +64,9 @@ public class SerializeUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private SerializeUtil() {
+        throw new IllegalStateException("Utility class");
     }
 }

@@ -168,7 +168,7 @@ public class HttpReqUtil {
     public static String httpDefaultExecute(String method, String path, Map<String, String> map, String data) {
         String result = "";
         try {
-            String url = setParams((TreeMap<String, String>) map, path, "");
+            String url = setParams(map, path, "");
             result = defaultConnection(method, url, DEFAULT_CONNTIME, DEFAULT_READTIME, data, null);
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());

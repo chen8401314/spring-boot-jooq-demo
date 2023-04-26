@@ -15,5 +15,8 @@ public class Consts {
      */
     public static final String COMMA = ",";
 
+    private Consts() {
+        throw new IllegalStateException("Utility class");
+    }
 
 }

@@ -26,7 +26,10 @@ public class RedisCache {
 
     public boolean exists(String key) {
         Boolean b = redisTemplate.hasKey(key);
-        return b == null ? false : b;
+        if (b == null) {
+            return false;
+        }
+        return b;
     }
 
     public void set(String key, String value) {

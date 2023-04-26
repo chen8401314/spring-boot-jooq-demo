@@ -121,7 +121,4 @@ public class Sequence {
         return SystemClock.now();
     }
 
-    public static void main(String[] args) {
-        System.out.println();
-    }
 }

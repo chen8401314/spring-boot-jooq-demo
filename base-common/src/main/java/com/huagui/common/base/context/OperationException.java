@@ -37,7 +37,7 @@ public class OperationException extends AbstractException {
      * @param format format
      * @param arguments 参数
      */
-    public OperationException(String format, Object... arguments){
+    protected OperationException(String format, Object... arguments){
         super(String.format(format, arguments));
     }
 

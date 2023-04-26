@@ -33,14 +33,13 @@ public class SystemClock {
     }
 
     private void scheduleClockUpdating() {
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor((runnable) -> {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(runnable-> {
             Thread thread = new Thread(runnable, "System Clock");
             thread.setDaemon(true);
             return thread;
         });
-        scheduler.scheduleAtFixedRate(() -> {
-            this.now.set(System.currentTimeMillis());
-        }, this.period, this.period, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(() ->
+            this.now.set(System.currentTimeMillis()), this.period, this.period, TimeUnit.MILLISECONDS);
     }
 
     private long currentTimeMillis() {

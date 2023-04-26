@@ -11,7 +11,6 @@ import com.google.common.base.Throwables;
 import com.huagui.common.base.context.ThreadLocalContextAccessor;
 import com.huagui.common.base.util.JWTUtils;
 import com.huagui.service.dto.Response;
-import com.huagui.service.util.BaseUtil;
 import com.huagui.service.util.HttpReqUtil;
 import com.huagui.service.util.IdWorker;
 import io.swagger.annotations.Api;

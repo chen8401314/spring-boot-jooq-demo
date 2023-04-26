@@ -22,20 +22,20 @@ public abstract class AbstractException extends RuntimeException {
     @Getter
     private BaseMsgInfo expMsg;
 
-    public AbstractException() {
+    protected AbstractException() {
         super();
     }
 
-    public AbstractException(BaseMsgInfo msg) {
+    protected AbstractException(BaseMsgInfo msg) {
         super(msg.getMessage());
         expMsg = msg;
     }
 
-    public AbstractException(String message) {
+    protected AbstractException(String message) {
         super(message);
     }
 
-    public AbstractException(String message, Throwable cause) {
+    protected AbstractException(String message, Throwable cause) {
         super(message, cause);
     }
 
