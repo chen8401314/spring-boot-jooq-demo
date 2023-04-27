@@ -40,8 +40,4 @@ public class SecurityUtil {
         return buf.toString();
     }
 
-    private SecurityUtil() {
-        throw new IllegalStateException("Utility class");
-    }
-
 }

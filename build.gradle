@@ -176,6 +176,7 @@ subprojects {
 
         implementation "de.codecentric:spring-boot-admin-starter-client:${springBootVersion}"
         implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
+
         //webService项目依赖
         if (webServiceProjects.contains(project.name)) {
             implementation project(":common-service")
@@ -186,6 +187,7 @@ subprojects {
             jooqGenerator "org.jooq:jooq-meta-extensions:${jooqVersion}"
             annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
         }
+        testImplementation "org.mockito:mockito-inline:${mockitoVersion}"
     }
     if (webServiceProjects.contains(project.name)) {
         jooq {
