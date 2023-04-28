@@ -13,21 +13,11 @@ import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.mockito.Mockito.mock;
 
 @TestInstance(PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class SecurityUtilTest {
 
-/*
-    @BeforeAll
-    public void setUp() {
-        // mock静态方法
-        MockedStatic<SecurityUtil> mockSpringUtil = Mockito.mockStatic(SecurityUtil.class);
-        mockSpringUtil.when(() -> SecurityUtil.getMD5("test")).thenReturn("098f6bcd4621d373cade4e832627b4f6");
-
-    }
-*/
 
     @Test
     void getMD5() {
@@ -42,9 +32,4 @@ class SecurityUtilTest {
 
     }
 
-    @Test
-    void SecurityUtil(){
-        SecurityUtil securityUtil = mock(SecurityUtil.class);
-        //verify(securityUtil).SecurityUtil();
-    }
 }
