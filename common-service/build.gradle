@@ -31,7 +31,7 @@ dependencies {
     api "cn.hutool:hutool-core:${hutoolVersion}"
     api "io.minio:minio:${minioVersion}"
 
-    if ("dev" == profile || "debug" == profile) {
+    if ("dev" == profile || "test" == profile) {
         api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
             exclude group: "com.netflix.hystrix"
             exclude group: "com.netflix.ribbon"
