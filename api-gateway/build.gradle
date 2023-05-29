@@ -2,7 +2,7 @@ dependencies {
     dependencies {
         def profile = System.getProperty("profile") ?: "dev"
         api "org.springframework.cloud:spring-cloud-starter"
-        if ("dev" == profile || "debug" == profile) {
+        if ("dev" == profile || "test" == profile) {
             api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
                 exclude group: "com.netflix.hystrix"
                 exclude group: "com.netflix.ribbon"
