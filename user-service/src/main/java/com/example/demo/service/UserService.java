@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.jooq.tables.daos.UserDao;
 import com.example.demo.jooq.tables.pojos.UserEntity;
 import com.example.demo.jooq.tables.records.UserRecord;
-import com.huagui.service.impl.ServiceImpl;
+import com.common.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;

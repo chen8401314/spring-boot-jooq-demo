@@ -1,6 +1,8 @@
 spring:
-  redis:
-    host: ${REDIS_HOST:localhost}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+  cloud:
     gateway:
       globalcors:
         cors-configurations:

@@ -1,10 +1,24 @@
 server:
   port: 8059
 spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
   datasource:
-    url: jdbc:mysql://localhost:10086/test?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: mysqladm
+    dynamic:
+      datasource:
+        master:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://localhost:10086/${MASTER_MYSQL_DATABASE:test1}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: mysqladm
+        slave:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://localhost:10086/${SLAVE_MYSQL_DATABASE:test1}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: mysqladm
+  kafka:
+    bootstrap-servers: ${KAFKA_POINT:192.168.5.78:9092}
 eureka:
   client:
     fetch-registry: true
@@ -14,3 +28,8 @@ eureka:
       defaultZone: http://localhost:8761/eureka,http://localhost:80/eureka
   instance:
     prefer-ip-address: true
+s3:
+  accessKey: ${ACCESS_KEY:admin}
+  secretKey: ${SECRET_KEY:admin123}
+  bucket: ${BUCKET:bim-ops-bucket}
+  endpoint: ${END_POINT:http://192.168.5.78:9000}

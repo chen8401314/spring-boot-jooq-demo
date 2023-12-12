@@ -6,10 +6,10 @@ import com.example.demo.jooq.tables.pojos.TestEntity;
 import com.example.demo.request.QueryTestReq;
 import com.example.demo.request.TestReq;
 import com.example.demo.service.TestService;
-import com.huagui.service.dto.Page;
-import com.huagui.service.dto.Response;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.common.service.dto.PageDTO;
+import com.common.service.dto.Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -27,33 +27,33 @@ import static com.example.demo.mapper.TestMapper.TEST_MAPPER;
 @RestController
 @RequestMapping("/test")
 @Slf4j
-@Api(tags = "测试管理接口")
+@Tag(name = "测试管理接口")
 @RequiredArgsConstructor
 public class TestController {
 
     private final TestService testService;
 
-    @ApiOperation(value = "保存或编辑test")
+    @Operation(summary = "保存或编辑test")
     @PostMapping(value = "/save")
-    public Response<String> save(@RequestBody TestReq req) {
-        testService.save(TEST_MAPPER.toEntity(req));
+    public Response<Void> save(@RequestBody TestReq req) {
+        testService.insert(TEST_MAPPER.toEntity(req));
         return Response.success();
     }
 
-    @ApiOperation(value = "获取id删除")
+    @Operation(summary = "获取id删除")
     @DeleteMapping(value = "/delById")
     public Response<Void> delById(@RequestParam String id) {
         testService.deleteById(id);
         return Response.success();
     }
 
-    @ApiOperation(value = "获取test通过ID")
+    @Operation(summary = "获取test通过ID")
     @GetMapping(value = "/findById")
     public Response<TestDTO> findById(@RequestParam String id) {
         return Response.success(TEST_MAPPER.toDTO(testService.findById(id)));
     }
 
-    @ApiOperation(value = "更新")
+    @Operation(summary = "更新")
     @PutMapping(value = "/update")
     public Response<Void> update(@RequestBody TestReq req) {
         TestEntity entity = testService.findById(req.getId());
@@ -65,9 +65,9 @@ public class TestController {
         return Response.success();
     }
 
-    @ApiOperation(value = "根据name查询分页")
+    @Operation(summary = "根据name查询分页")
     @PostMapping(value = "/findPage")
-    public Response<Page<TestDTO>> findPageByName(@RequestBody QueryTestReq req) {
+    public Response<PageDTO<TestDTO>> findPageByName(@RequestBody QueryTestReq req) {
         return Response.success(testService.findPageByName(req));
     }
 }

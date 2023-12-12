@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <contextName>${COMPONENT}</contextName>
+    <property name="CHARSET" value="UTF-8"/>
+    <property name="PATTERN"
+              value="%blue(%date{yyyy-MM-dd HH:mm:ss.SSS}) [%thread] %highlight(%-5level) %cyan(%logger{50}) - %highlight(%msg) %n"/>
+
+    <!-- console output -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <logger name="org.jooq" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

@@ -49,39 +49,39 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: "io.spring.dependency-management"
 
+    apply plugin: "jacoco"
+
+    jacoco {
+        toolVersion = "0.8.7"
+        reportsDir = file("$buildDir/customJacocoReportDir")
+    }
+    jacocoTestReport {
+        dependsOn test
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports after running tests."
+        reports {
+            xml.enabled true
+            html.enabled true
+            //xml.destination file("${buildDir}/reports/jacoco.xml")
+        }
+        afterEvaluate {
+            getClassDirectories().setFrom(
+                    classDirectories.files.collect {
+                        fileTree(dir: it,
+                                include: ['com/**/service/*', 'com/**/util/*'])
+                    }
+            )
+        }
+    }
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+
     def webServiceProjects = ['user-service']
     if (webServiceProjects.contains(project.name)) {
         apply plugin: "nu.studer.jooq"
         apply plugin: "org.sonarqube"
-
-        apply plugin: "jacoco"
-
-        jacoco {
-            toolVersion = "0.8.7"
-            reportsDir = file("$buildDir/customJacocoReportDir")
-        }
-        jacocoTestReport {
-            dependsOn test
-            group = "Reporting"
-            description = "Generate Jacoco coverage reports after running tests."
-            reports {
-                xml.enabled true
-                html.enabled true
-                //xml.destination file("${buildDir}/reports/jacoco.xml")
-            }
-            afterEvaluate {
-                getClassDirectories().setFrom(
-                        classDirectories.files.collect {
-                            fileTree(dir: it,
-                                    include: ['com/**/service/*', 'com/**/util/*'])
-                        }
-                )
-            }
-        }
-        test {
-            useJUnitPlatform()
-            finalizedBy jacocoTestReport
-        }
 
         sonarqube {
             properties {
@@ -162,9 +162,6 @@ subprojects {
         implementation "org.apache.commons:commons-collections4:${commonsCollections4Version}"
         implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
 
-        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
-        implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4jVersion}"
-        implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
         implementation("io.jsonwebtoken:jjwt:${jjwtVersion}") {
             exclude group: "com.fasterxml.jackson.core"
         }
@@ -173,8 +170,6 @@ subprojects {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-
-        implementation "de.codecentric:spring-boot-admin-starter-client:${springBootVersion}"
         implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
 
         //webService项目依赖
@@ -219,7 +214,7 @@ subprojects {
                                     }
                                     property {
                                         key = 'defaultNameCase'
-                                        value = 'as_is'
+                                        value = 'lower'
                                     }
                                 }
                             }
@@ -227,7 +222,7 @@ subprojects {
                                 pojos = true
                                 daos = true
                                 springAnnotations = true
-                                springDao = true
+                                springDao = false
                                 javaTimeTypes = true
                             }
                             target {

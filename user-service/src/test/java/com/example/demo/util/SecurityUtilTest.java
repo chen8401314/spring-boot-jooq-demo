@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.huagui.common.base.context.OperationException;
+import com.common.service.handler.OperationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,3 +33,4 @@ class SecurityUtilTest {
     }
 
 }
+

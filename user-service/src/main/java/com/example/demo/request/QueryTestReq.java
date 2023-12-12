@@ -1,7 +1,7 @@
 package com.example.demo.request;
 
-import com.huagui.service.dto.PageReq;
-import io.swagger.annotations.ApiModelProperty;
+import com.common.service.dto.PageReq;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,6 +9,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class QueryTestReq extends PageReq {
 
-    @ApiModelProperty(value = "名字")
+    @Schema(description = "名字")
     private String name;
 }

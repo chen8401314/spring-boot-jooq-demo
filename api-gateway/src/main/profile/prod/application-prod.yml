@@ -1,7 +1,7 @@
 spring:
   redis:
     cluster:
-      nodes: redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379
+      nodes: ${REDIS_CLUSTER_NODES:redis-cluster-0:6379,redis-cluster-1:6379,redis-cluster-2:6379}
   cloud:
     kubernetes:
       enabled: true

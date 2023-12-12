@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,10 +9,10 @@ import java.io.Serializable;
 public class UserDTO implements Serializable {
 
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private String id;
 
-    @ApiModelProperty(value = "用户名")
+    @Schema(description = "用户名")
     private String username;
 
 }

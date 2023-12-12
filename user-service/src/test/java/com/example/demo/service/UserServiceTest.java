@@ -1,14 +1,18 @@
+
 package com.example.demo.service;
 
 import com.example.demo.jooq.tables.daos.UserDao;
 import com.example.demo.jooq.tables.pojos.UserEntity;
-import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
+import com.google.common.collect.Lists;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
@@ -16,6 +20,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserServiceTest {
 
     @InjectMocks
@@ -24,8 +29,8 @@ class UserServiceTest {
     @Mock
     UserDao userDao;
 
-    @BeforeEach
-    void setUp() throws Exception {
+    @BeforeAll
+    void setUp(){
         MockitoAnnotations.initMocks(this);
     }
 
@@ -47,3 +52,4 @@ class UserServiceTest {
         assertNull(user1);
     }
 }
+

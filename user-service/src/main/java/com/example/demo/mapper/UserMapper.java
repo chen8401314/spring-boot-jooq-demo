@@ -3,7 +3,7 @@ package com.example.demo.mapper;
 
 import com.example.demo.dto.UserDTO;
 import com.example.demo.jooq.tables.pojos.UserEntity;
-import com.huagui.service.config.StructConfig;
+import com.common.service.config.StructConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

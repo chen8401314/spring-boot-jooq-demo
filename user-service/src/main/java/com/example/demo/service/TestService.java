@@ -6,8 +6,8 @@ import com.example.demo.jooq.tables.pojos.TestEntity;
 import com.example.demo.jooq.tables.records.TestRecord;
 import com.example.demo.repository.TestRep;
 import com.example.demo.request.QueryTestReq;
-import com.huagui.service.dto.Page;
-import com.huagui.service.impl.ServiceImpl;
+import com.common.service.dto.PageDTO;
+import com.common.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TestService extends ServiceImpl<TestDao, TestEntity, TestRecord> {
     private final TestRep testRep;
 
-    public Page<TestDTO> findPageByName(QueryTestReq req) {
+    public PageDTO<TestDTO> findPageByName(QueryTestReq req) {
         return testRep.findPageByName(req);
     }
 }

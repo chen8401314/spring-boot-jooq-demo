@@ -1,12 +1,12 @@
 package com.example.demo.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
 
 /**
 * @Title: 登录请求
@@ -20,11 +20,11 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class UserReq {
 
-    @ApiModelProperty(value = "登录账号")
+    @Schema(description = "登录账号")
     @NotEmpty
     private String username;
 
-    @ApiModelProperty(value = "登录密码")
+    @Schema(description = "登录密码")
     @NotEmpty
     private String password;
 }

@@ -2,27 +2,83 @@ server:
   servlet:
     context-path: /user
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: @profile@
   application:
     name: user-service
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    # 使用druid数据源
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    filters: stat
-    maxActive: 20
-    initialSize: 1
-    maxWait: 60000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: true #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+    hikari:
+      is-auto-commit: true
+      max-lifetime: 3600000
+      minimum-idle: 8
+      connection-timeout: 60000
+      connection-test-query: SELECT 1
+      idle-timeout: 60000
+      maximum-pool-size: 64
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  kafka:
+    listener:
+      #设置是否批量消费，默认 single（单条），batch（批量）
+      type: single
+    # 生产者配置
+    producer:
+      # 重试次数
+      retries: 0
+      # Key 序列化类
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Value 序列化类
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 消息压缩：none、lz4、gzip、snappy，默认为 none。
+      compression-type: gzip
+      properties:
+        partitioner:
+          #指定自定义分区器
+          class: org.apache.kafka.clients.producer.RoundRobinPartitioner
+    # 消费者配置
+    consumer:
+      # 默认消费者组
+      group-id: bdsUserGroup
+      # Key 反序列化类
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # Value 反序列化类
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+feign:
+  okhttp:
+    enabled: true
+  httpclient:
+    enabled: false
+  compression:
+    request:
+      enabled: false
+      mime-types: text/xml,application.xml,application/json
+      min-request-size: 2048
+    response:
+      enabled: false
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 30000
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn

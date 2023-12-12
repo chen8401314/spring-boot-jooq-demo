@@ -1,10 +1,22 @@
-server:
-  port: 8069
 spring:
+  data:
+    redis:
+      host: redis
   datasource:
-    url: jdbc:mysql://${MYSQL_IP:mysql}:${MYSQL_PORT:3306}/user_service?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:mysqladm}
+    dynamic:
+      datasource:
+        master:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://${MASTER_MYSQL_IP:mysql}:${MASTER_MYSQL_PORT:3306}/${MASTER_MYSQL_DATABASE:test}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: ${MASTER_MYSQL_USERNAME:root}
+          password: ${MASTER_MYSQL_PASSWORD:mysqladm}
+        slave:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://${SLAVE_MYSQL_IP:mysql}:${SLAVE_MYSQL_PORT:3306}/${SLAVE_MYSQL_DATABASE:test}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: ${SLAVE_MYSQL_USERNAME:root}
+          password: ${SLAVE_MYSQL_PASSWORD:mysqladm}
+  kafka:
+    bootstrap-servers: ${KAFKA_POINT:192.168.5.78:9092}
 eureka:
   client:
     fetch-registry: true
@@ -14,3 +26,8 @@ eureka:
       defaultZone: http://${EUREKA_HOST:bim-eureka.huagui.com.cn}/eureka
   instance:
     prefer-ip-address: true
+s3:
+  accessKey: ${ACCESS_KEY:admin}
+  secretKey: ${SECRET_KEY:admin123}
+  bucket: ${BUCKET:bim-ops-bucket}
+  endpoint: ${END_POINT:https://minio-test.hjbim.com}

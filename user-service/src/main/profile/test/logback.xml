@@ -33,6 +33,9 @@
 
     <root level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="file"/>
     </root>
+
+    <logger name="org.jooq" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
 </configuration>

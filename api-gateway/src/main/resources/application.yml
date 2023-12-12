@@ -8,8 +8,6 @@ spring:
     name: gateway
   profiles:
     active: @profile@
-  redis:
-    host: ${REDIS_HOST:localhost}
   main:
     allow-bean-definition-overriding: true
   cloud:
@@ -23,15 +21,35 @@ spring:
         enable: true
     gateway:
       routes:
-        - id: huagui-user-anonymous
-          order: 0
+        - id: bds-user-doc
+          order: 1
           predicates:
-            - Path=/user/*/anon/**, /user/swagger-ui.html**, /user/doc.html**, /user/webjars/**, /user/v2/api-docs, /user/swagger-resources/**
+            - Path=/user/swagger-ui/**, /user/doc.html**, /user/v3/api-docs.yaml, /user/webjars/**, /user/v3/api-docs/**, /user/swagger-resources/**
           uri: lb://user-service
           filters:
             - OrderedAddRequestHeader=anonymous, TRUE
-        - id: huagui-user
-          order: 1
+        - id: bds-user-login
+          order: 2
+          predicates:
+            - Path=/user/user/anon/login,/user/user/anon/getAccessToken
+          uri: lb://user-service
+          filters:
+            - name: CircuitBreaker
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@apiKeyResolver}"
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
+            - OrderedAddRequestHeader=anonymous, TRUE
+        - id: bds-user-anonymous
+          order: 5
+          predicates:
+            - Path=/user/*/anon/**
+          uri: lb://user-service
+          filters:
+            - OrderedAddRequestHeader=anonymous, TRUE
+        - id: bds-user
+          order: 10
           predicates:
             - Path=/user/**
           uri: lb://user-service
@@ -42,34 +60,25 @@ spring:
                 key-resolver: "#{@userKeyResolver}"
                 redis-rate-limiter.replenishRate: 30
                 redis-rate-limiter.burstCapacity: 60
-        # ==============websocket 路由=============
-        - id: user-websocket
-          uri: lb:${WEBSOCKET_TYPE:ws}://user-service
-          order: 19
+        - id: bds-bim-anonymous
+          order: 20
+          uri: lb://bimraw
           predicates:
-            - Path=/ws/user/websocket/**
+            - Path=/BimRaw/OssMgt/**, /BimRaw/swagger**
           filters:
-            - StripPrefix=1
+            - OrderedAddRequestHeader=anonymous, TRUE
+        - id: bds-bim
+          order: 25
+          predicates:
+            - Path=/BimRaw/**
+          uri: lb://bimraw
+          filters:
             - name: CircuitBreaker
             - name: RequestRateLimiter
               args:
                 key-resolver: "#{@userKeyResolver}"
                 redis-rate-limiter.replenishRate: 30
                 redis-rate-limiter.burstCapacity: 60
-        - id: huagui-bim-cache
-          order: 21
-          uri: lb://bimmodel
-          predicates:
-            - Path=/api/**
-          filters:
-            - OrderedAddRequestHeader=anonymous, TRUE
-        - id: huagui-bim-data
-          order: 24
-          uri: ${BIMDATA_SERVER:lb://bimdata}
-          predicates:
-            - Path=/bimdata/**
-          filters:
-            - OrderedAddRequestHeader=anonymous, TRUE
 eureka: #eureka配置
   client:
     fetch-registry: true
@@ -77,7 +86,16 @@ eureka: #eureka配置
     register-with-eureka: ${REGISTER_EUREKA:true}
   instance:
     prefer-ip-address: true
-
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 50
+resilience4j.timelimiter:
+  configs:
+    default:
+      timeoutDuration: ${TIMEOUT_SECOND:180s}
+      cancelRunningFuture: true
 management:
   endpoints:
     web:

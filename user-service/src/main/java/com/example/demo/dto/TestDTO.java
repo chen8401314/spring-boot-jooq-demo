@@ -1,8 +1,8 @@
 package com.example.demo.dto;
 
 import com.example.demo.enumeration.StatusEnum;
-import com.huagui.service.dto.BaseDTO;
-import io.swagger.annotations.ApiModelProperty;
+import com.common.service.dto.BaseDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,15 +12,16 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class TestDTO extends BaseDTO {
 
-    @ApiModelProperty(value = "名字")
+    @Schema(description = "名字")
     private String name;
-
-    @ApiModelProperty(value = "是否是首页")
-    private Boolean home;
-
-    @ApiModelProperty(value = "生日")
+    @Schema(description = "年龄")
+    private Integer age;
+    @Schema(description = "头像")
+    private String photo;
+    @Schema(description = "是否结婚")
+    private Boolean marry;
+    @Schema(description = "生日")
     private LocalDate birthday;
-
-    @ApiModelProperty(value = "状态")
+    @Schema(description = "状态")
     private StatusEnum status;
 }

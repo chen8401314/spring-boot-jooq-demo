@@ -8,28 +8,20 @@ dependencies {
 
     api project(':base-common')
     api "org.mapstruct:mapstruct:${mapStructVersion}"
-    api "org.springframework.boot:spring-boot-starter:${springBootVersion}"
-    api "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    api "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    api "org.springframework.boot:spring-boot-starter-jooq:${springBootVersion}"
-    api "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-
-    api "com.alibaba:druid:${druidVersion}"
-    api "javax.validation:validation-api:${validationVersion}"
-    api "org.hibernate:hibernate-validator:${hibernateValidationVersion}"
-
-    api("io.springfox:springfox-swagger2:${swaggerVersion}") {
-        exclude group: "com.google.guava", module: "guava"
-        exclude group: "org.slf4j", module: "slf4j-api"
-        exclude group: "com.fasterxml.jackson.core"
-    }
-    api "io.springfox:springfox-swagger-ui:${swaggerVersion}"
-    api "com.github.xiaoymin:swagger-bootstrap-ui:${swaggerUiVersion}"
+    api "org.springframework.boot:spring-boot-starter"
+    api "org.springframework.boot:spring-boot-starter-web"
+    api "org.springframework.boot:spring-boot-starter-actuator"
+    api "org.springframework.boot:spring-boot-starter-jooq"
+    api "org.springframework.boot:spring-boot-starter-validation"
 
 
+
+
+    api "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
+    api "com.alibaba:easyexcel:${easyexcelVersion}"
     api "mysql:mysql-connector-java:${mysqlVersion}"
     api "cn.hutool:hutool-core:${hutoolVersion}"
-    api "io.minio:minio:${minioVersion}"
+    api "com.baomidou:dynamic-datasource-spring-boot3-starter:${baomidouVersion}"
 
     if ("dev" == profile || "test" == profile) {
         api("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
@@ -39,12 +31,16 @@ dependencies {
             exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-ribbon"
             exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-ribbon"
             exclude group: "org.springframework.cloud", module: "spring-cloud-netflix-hystrix"
+            exclude group: "commons-logging"
+            exclude group: "org.apache.httpcomponents", module: "httpclient"
         }
     } else {
         api("org.springframework.cloud:spring-cloud-starter-kubernetes-client-all") {
             exclude group: "org.springframework.cloud", module: "spring-cloud-kubernetes-ribbon"
         }
     }
+    api "org.springframework.cloud:spring-cloud-starter-openfeign"
+    api "org.springframework.cloud:spring-cloud-loadbalancer"
 }
 jar.enabled = true
 bootJar.enabled = false

@@ -4,13 +4,20 @@ plugins {
 
 dependencies {
 
+    api "org.springframework.boot:spring-boot-starter-test"
     api "org.aspectj:aspectjweaver:${aspectjVersion}"
-    api "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
+    api "org.springframework.boot:spring-boot-starter-data-redis"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}") {
         exclude group: 'com.fasterxml.jackson.core'
     }
-    api "org.apache.httpcomponents:httpclient:4.5.10"
+    api ("org.apache.httpcomponents:httpclient:${httpclientVersion}"){
+        exclude group: "commons-logging"
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 jar.enabled = true
 bootJar.enabled = false

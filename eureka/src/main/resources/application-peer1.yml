@@ -1,10 +1,11 @@
 server:
   port: 8761
-  host: localhost
 spring:
   application:
     name: eureka-server-clustered
-  profiles: peer1
+  config:
+    activate:
+      on-profile: peer1
 eureka:
   instance:
     hostname: localhost

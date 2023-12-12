@@ -1,6 +1,7 @@
 package com.example.demo.util;
 
-import com.huagui.common.base.context.OperationException;
+
+import com.common.service.handler.OperationException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
