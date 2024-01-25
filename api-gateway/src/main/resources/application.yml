@@ -1,4 +1,3 @@
-timeoutSecond: ${TIMEOUT_SECOND:180}
 server:
   port: 8080
   servlet:
@@ -91,11 +90,6 @@ resilience4j.circuitbreaker:
     default:
       registerHealthIndicator: true
       slidingWindowSize: 50
-resilience4j.timelimiter:
-  configs:
-    default:
-      timeoutDuration: ${TIMEOUT_SECOND:180s}
-      cancelRunningFuture: true
 management:
   endpoints:
     web:
