@@ -19,7 +19,7 @@ dependencies {
 
     api "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
     api "com.alibaba:easyexcel:${easyexcelVersion}"
-    api "mysql:mysql-connector-java:${mysqlVersion}"
+    api "com.mysql:mysql-connector-j"
     api "cn.hutool:hutool-core:${hutoolVersion}"
     api "com.baomidou:dynamic-datasource-spring-boot3-starter:${baomidouVersion}"
 

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.common.service.handler.OperationException;
 import com.example.demo.dto.TestDTO;
 import com.example.demo.jooq.tables.pojos.TestEntity;
 import com.example.demo.request.QueryTestReq;
@@ -70,4 +71,11 @@ public class TestController {
     public Response<PageDTO<TestDTO>> findPageByName(@RequestBody QueryTestReq req) {
         return Response.success(testService.findPageByName(req));
     }
+
+    @Operation(summary = "testtesttest")
+    @GetMapping(value = "/anon/test")
+    public Response<Void> test() {
+        throw new OperationException("测试报错");
+    }
+
 }

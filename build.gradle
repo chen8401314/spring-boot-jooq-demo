@@ -16,14 +16,15 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
         mavenCentral()
     }
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0")
-        classpath("nu.studer:gradle-jooq-plugin:8.1")
-    }
 }
 
+plugins {
+    id "org.springframework.boot" version "3.2.2"
+    id "io.freefair.lombok" version "8.6"
+    id "io.spring.dependency-management" version "1.1.4"
+    id "org.sonarqube" version "4.4.1.3373"
+    id "nu.studer.jooq" version "9.0"
+}
 
 subprojects {
     buildscript {
@@ -46,37 +47,38 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'java-library'
+    apply plugin: "io.freefair.lombok"
     apply plugin: 'org.springframework.boot'
     apply plugin: "io.spring.dependency-management"
 
-    apply plugin: "jacoco"
-
-    jacoco {
-        toolVersion = "0.8.7"
-        reportsDir = file("$buildDir/customJacocoReportDir")
-    }
-    jacocoTestReport {
-        dependsOn test
-        group = "Reporting"
-        description = "Generate Jacoco coverage reports after running tests."
-        reports {
-            xml.enabled true
-            html.enabled true
-            //xml.destination file("${buildDir}/reports/jacoco.xml")
-        }
-        afterEvaluate {
-            getClassDirectories().setFrom(
-                    classDirectories.files.collect {
-                        fileTree(dir: it,
-                                include: ['com/**/service/*', 'com/**/util/*'])
-                    }
-            )
-        }
-    }
-    test {
-        useJUnitPlatform()
-        finalizedBy jacocoTestReport
-    }
+//    apply plugin: "jacoco"
+//
+//    jacoco {
+//        toolVersion = "0.8.7"
+//        reportsDir = file("$buildDir/customJacocoReportDir")
+//    }
+//    jacocoTestReport {
+//        dependsOn test
+//        group = "Reporting"
+//        description = "Generate Jacoco coverage reports after running tests."
+//        reports {
+//            xml.enabled true
+//            html.enabled true
+//            //xml.destination file("${buildDir}/reports/jacoco.xml")
+//        }
+//        afterEvaluate {
+//            getClassDirectories().setFrom(
+//                    classDirectories.files.collect {
+//                        fileTree(dir: it,
+//                                include: ['com/**/service/*', 'com/**/util/*'])
+//                    }
+//            )
+//        }
+//    }
+//    test {
+//        useJUnitPlatform()
+//        finalizedBy jacocoTestReport
+//    }
 
     def webServiceProjects = ['user-service']
     if (webServiceProjects.contains(project.name)) {
@@ -89,16 +91,16 @@ subprojects {
                 property "sonar.sourceEncoding", "UTF-8"
             }
         }
-        tasks['sonarqube'].dependsOn(jacocoTestReport)
+//        tasks['sonarqube'].dependsOn(jacocoTestReport)
     }
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = project.javaSourceCompatibility
+    targetCompatibility = project.javaTargetCompatibility
 
 
     dependencyManagement {
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
+         //   mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
         }
     }
 
@@ -170,7 +172,7 @@ subprojects {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-        implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}", force: true
+        implementation group: "com.google.guava", name: "guava", version: "${guavaVersion}"
 
         //webService项目依赖
         if (webServiceProjects.contains(project.name)) {
@@ -186,6 +188,7 @@ subprojects {
     }
     if (webServiceProjects.contains(project.name)) {
         jooq {
+            version = "$jooqVersion"
             configurations {
                 main {
                     generationTool {
@@ -234,20 +237,9 @@ subprojects {
             }
         }
         tasks.named('generateJooq').configure {
-            // customize execution of the code generation tool (only show output if code generation failed)
-            AtomicReference<OutputStream> outRef = new AtomicReference()
+            // add additional JVM arguments
             javaExecSpec = { JavaExecSpec s ->
-                outRef.set(new ByteArrayOutputStream())
-                s.standardOutput = outRef.get()
-                s.errorOutput = outRef.get()
-                s.ignoreExitValue = true
                 s.jvmArgs '-Xmx512M'
-            }
-            execResultHandler = { ExecResult r ->
-                def out = outRef.getAndSet(null)
-                if (r.exitValue != 0) {
-                    throw new RuntimeException('jOOQ source code generation failed:\n\n' + out.toString())
-                }
             }
         }
     }
