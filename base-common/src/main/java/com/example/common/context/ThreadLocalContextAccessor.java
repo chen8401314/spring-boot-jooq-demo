@@ -3,11 +3,11 @@ package com.example.common.context;
 import lombok.SneakyThrows;
 
 /**
-* @Title:
-* @Description:
-* @Author: chenx
-* @Date: 2023/7/11
-*/
+ * @Title:
+ * @Description:
+ * @Author: chenx
+ * @Date: 2023/7/11
+ */
 public final class ThreadLocalContextAccessor {
 
     private static final ThreadLocal<ServiceContext> contextHolder = new ThreadLocal<>();
@@ -26,11 +26,11 @@ public final class ThreadLocalContextAccessor {
 
     @SneakyThrows
     public static String getUserId() {
-        return getServiceContext().getUserId();
+        return getServiceContext() == null ? "" : getServiceContext().getUserId();
     }
 
     public static String getLoginName() {
-        return getServiceContext().getLoginName();
+        return  getServiceContext() == null ? "" : getServiceContext().getLoginName();
     }
 
     public static void resetServiceContext() {

@@ -1,18 +1,20 @@
 package com.example.demo.controller;
 
 
+import com.common.service.dto.PageDTO;
+import com.common.service.dto.Response;
 import com.common.service.handler.OperationException;
 import com.example.demo.dto.TestDTO;
 import com.example.demo.jooq.tables.pojos.TestEntity;
 import com.example.demo.request.QueryTestReq;
 import com.example.demo.request.TestReq;
 import com.example.demo.service.TestService;
-import com.common.service.dto.PageDTO;
-import com.common.service.dto.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.demo.mapper.TestMapper.TEST_MAPPER;
@@ -72,10 +74,6 @@ public class TestController {
         return Response.success(testService.findPageByName(req));
     }
 
-    @Operation(summary = "testtesttest")
-    @GetMapping(value = "/anon/test")
-    public Response<Void> test() {
-        throw new OperationException("测试报错");
-    }
+
 
 }

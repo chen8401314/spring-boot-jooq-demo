@@ -2,11 +2,13 @@ package com.example.demo.request;
 
 import com.example.demo.enumeration.StatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class TestReq {
 
     @Schema(description = "id")

@@ -8,9 +8,13 @@ import com.example.demo.repository.TestRep;
 import com.example.demo.request.QueryTestReq;
 import com.common.service.dto.PageDTO;
 import com.common.service.impl.ServiceImpl;
+import com.example.demo.request.TestReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.demo.mapper.TestMapper.TEST_MAPPER;
 
 /**
  * <p>
@@ -29,4 +33,6 @@ public class TestService extends ServiceImpl<TestDao, TestEntity, TestRecord> {
     public PageDTO<TestDTO> findPageByName(QueryTestReq req) {
         return testRep.findPageByName(req);
     }
+
+
 }
