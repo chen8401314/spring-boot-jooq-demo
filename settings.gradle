@@ -1,3 +1,25 @@
+pluginManagement {
+    repositories {
+        maven {
+            allowInsecureProtocol = true
+            name = "shanghai"
+            url = "http://192.168.1.108:10081/repository/gradle-plugin/"
+        }
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        maven {
+            allowInsecureProtocol = true
+            name = "shanghai"
+            url = "http://192.168.1.108:10081/repository/maven-public/"
+        }
+        maven { url "https://maven.aliyun.com/repository/public" }
+    }
+}
 include 'custom-generator'
 project(':custom-generator').projectDir = new File(settingsDir, './custom-generator')
 include 'api-gateway'

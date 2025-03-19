@@ -1,27 +1,9 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        maven {
-            allowInsecureProtocol = true
-            name = "shanghai"
-            url = project.ext.repositoryUrl
-        }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/spring/' }
-        maven { url 'https://maven.aliyun.com/repository/central/' }
-        maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
-        maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
-        mavenCentral()
-    }
-}
-
 plugins {
     id "org.springframework.boot" version "3.2.2"
     id "io.freefair.lombok" version "8.6"
     id "io.spring.dependency-management" version "1.1.4"
-    id "org.sonarqube" version "4.4.1.3373"
     id "nu.studer.jooq" version "9.0"
+    id "org.sonarqube" version "3.0"
 }
 
 subprojects {
@@ -49,34 +31,9 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: "io.spring.dependency-management"
 
-//    apply plugin: "jacoco"
-//
-//    jacoco {
-//        toolVersion = "0.8.7"
-//        reportsDir = file("$buildDir/customJacocoReportDir")
-//    }
-//    jacocoTestReport {
-//        dependsOn test
-//        group = "Reporting"
-//        description = "Generate Jacoco coverage reports after running tests."
-//        reports {
-//            xml.enabled true
-//            html.enabled true
-//            //xml.destination file("${buildDir}/reports/jacoco.xml")
-//        }
-//        afterEvaluate {
-//            getClassDirectories().setFrom(
-//                    classDirectories.files.collect {
-//                        fileTree(dir: it,
-//                                include: ['com/**/service/*', 'com/**/util/*'])
-//                    }
-//            )
-//        }
-//    }
-//    test {
-//        useJUnitPlatform()
-//        finalizedBy jacocoTestReport
-//    }
+    test {
+        useJUnitPlatform()
+    }
 
     def webServiceProjects = ['user-service']
     if (webServiceProjects.contains(project.name)) {
@@ -89,7 +46,6 @@ subprojects {
                 property "sonar.sourceEncoding", "UTF-8"
             }
         }
-//        tasks['sonarqube'].dependsOn(jacocoTestReport)
     }
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
@@ -98,7 +54,6 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-         //   mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
         }
     }
 
@@ -191,7 +146,7 @@ subprojects {
                 main {
                     generationTool {
                         generator {
-                            name = 'org.jooq.codegen.DefaultGenerator'
+                            name = 'nu.studer.sample.CustomJavaGenerator'
                             strategy {
                                 name = 'nu.studer.sample.SampleGeneratorStrategy'
                                 // use the custom generator strategy
@@ -235,7 +190,6 @@ subprojects {
             }
         }
         tasks.named('generateJooq').configure {
-            // add additional JVM arguments
             javaExecSpec = { JavaExecSpec s ->
                 s.jvmArgs '-Xmx512M'
             }
