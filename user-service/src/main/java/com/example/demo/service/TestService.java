@@ -30,6 +30,22 @@ import static com.example.demo.mapper.TestMapper.TEST_MAPPER;
 public class TestService extends ServiceImpl<TestDao, TestEntity, TestRecord> {
     private final TestRep testRep;
 
+    public void test1(){
+        TestEntity test1 = TEST_MAPPER.toEntity(TestReq.builder().name("test").build());
+        insert(test1);
+
+        TestEntity test2 = TEST_MAPPER.toEntity(TestReq.builder().name("test01234567890123456789333").build());
+        insert(test2);
+    }
+    public void test2(){
+        TestEntity test1 = TEST_MAPPER.toEntity(TestReq.builder().name("test").build());
+        insert(test1);
+
+        TestEntity test2 = TEST_MAPPER.toEntity(TestReq.builder().name("test9333").build());
+        insert(test2);
+    }
+
+
     public PageDTO<TestDTO> findPageByName(QueryTestReq req) {
         return testRep.findPageByName(req);
     }

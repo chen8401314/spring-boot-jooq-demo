@@ -5,6 +5,7 @@ import com.common.service.dto.PageDTO;
 import com.common.service.dto.Response;
 import com.common.service.handler.OperationException;
 import com.example.demo.dto.TestDTO;
+import com.example.demo.feign.FeignTestRpc;
 import com.example.demo.jooq.tables.pojos.TestEntity;
 import com.example.demo.request.QueryTestReq;
 import com.example.demo.request.TestReq;
@@ -35,6 +36,7 @@ import static com.example.demo.mapper.TestMapper.TEST_MAPPER;
 public class TestController {
 
     private final TestService testService;
+    private final FeignTestRpc feignTestRpc;
 
     @Operation(summary = "保存或编辑test")
     @PostMapping(value = "/save")
@@ -54,6 +56,38 @@ public class TestController {
     @GetMapping(value = "/findById")
     public Response<TestDTO> findById(@RequestParam String id) {
         return Response.success(TEST_MAPPER.toDTO(testService.findById(id)));
+    }
+
+    @Operation(summary = "test")
+    @GetMapping(value = "/anon/test")
+    public Response<Void> test() {
+
+            for (int i = 0; i < 2; i++) {
+                try {
+                    if (i == 0) {
+                        testService.test1();
+                    } else if (i == 1) {
+                        testService.test2();
+                    }
+                } catch (Exception e) {
+                    log.error("test error", e);
+                }
+            }
+        return Response.success();
+    }
+
+    @Operation(summary = "testTimeOut")
+    @GetMapping(value = "/anon/testTimeOut")
+    public Response<Void> testTimeOut(@RequestParam int timeout) throws InterruptedException {
+        Thread.sleep(timeout);
+        return Response.success();
+    }
+
+    @Operation(summary = "testFeign")
+    @GetMapping(value = "/anon/testFeign")
+    public Response<String> testFeign(@RequestParam int timeout) {
+        feignTestRpc.testTimeOut(timeout);
+        return Response.success();
     }
 
     @Operation(summary = "更新")

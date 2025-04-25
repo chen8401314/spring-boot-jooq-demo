@@ -2,6 +2,13 @@ server:
   servlet:
     context-path: /user
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          testFeign:
+            connectTimeout: 2000
+            readTimeout: 1800000
   main:
     allow-bean-definition-overriding: true
   profiles:
@@ -72,13 +79,9 @@ feign:
       enabled: false
   hystrix:
     enabled: true
-  client:
-    config:
-      default:
-        connectTimeout: 60000
-        readTimeout: 30000
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: true
   setting:
     language: zh_cn
+
