@@ -58,23 +58,6 @@ public class TestController {
         return Response.success(TEST_MAPPER.toDTO(testService.findById(id)));
     }
 
-    @Operation(summary = "test")
-    @GetMapping(value = "/anon/test")
-    public Response<Void> test() {
-
-            for (int i = 0; i < 2; i++) {
-                try {
-                    if (i == 0) {
-                        testService.test1();
-                    } else if (i == 1) {
-                        testService.test2();
-                    }
-                } catch (Exception e) {
-                    log.error("test error", e);
-                }
-            }
-        return Response.success();
-    }
 
     @Operation(summary = "testTimeOut")
     @GetMapping(value = "/anon/testTimeOut")
