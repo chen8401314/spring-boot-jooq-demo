@@ -56,7 +56,7 @@ public class UserController {
 
     @PostMapping(value = "/anon/login")
     @Operation(summary = "用户登陆")
-    public Response<Void> login(@RequestBody @Validated LoginReq req, HttpServletResponse response) {
+    public Response<String> login(@RequestBody @Validated LoginReq req, HttpServletResponse response) {
         try {
             // 对传入的密码进行解密
             UserEntity userEntity = userService.findByUsername(req.getUsername());
@@ -71,7 +71,7 @@ public class UserController {
             //如果是移动端登录token失效时间为一年
             jwt = JWTUtils.createToken(userEntity.getId(), userEntity.getUsername());
             HttpReqUtil.setTokenCookies(jwt, response);
-            return Response.success();
+            return Response.success(jwt);
         } catch (Exception e) {
             log.info(Throwables.getStackTraceAsString(e));
             return Response.failure(e.getMessage());
