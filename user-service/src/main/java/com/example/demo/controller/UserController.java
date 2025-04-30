@@ -80,7 +80,7 @@ public class UserController {
 
     @GetMapping(value = "/logout")
     @Operation(summary = "用户登出")
-    public Response<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+    public Response<Void> logout(HttpServletResponse response) {
         // 暂时隐藏用户退出删除缓存操作
         HttpReqUtil.setTokenCookies("", response);
         return Response.success(DEFAULT_CODE_SUCCESS, "登出成功");
