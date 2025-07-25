@@ -5,13 +5,12 @@ import com.example.common.exception.MessageEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-/**
- * 操作异常
- *
- * @author lvdongfeng
- * @date 2019/7/22 14:38
- * @desc
- */
+/** 
+* @Title: 
+* @Description:  
+* @Author: chenx 
+* @Date: 2025/6/20 
+*/ 
 @ResponseStatus(HttpStatus.OK)
 public class OperationException extends AbstractException {
 
